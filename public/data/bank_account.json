@@ -1,0 +1,1008 @@
+{
+    "data": {
+        "dim_bank_accounts": {
+            "items": [
+                {
+                    "account_name": "0000000005058866",
+                    "bank": "Gulf Bank",
+                    "CCY": "KWD",
+                    "ARE": "4732",
+                    "are_name": "Siemens Electrical & Electronic Services K.S.C.C.",
+                    "country": "KW",
+                    "currency": "KWD",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "011173275427",
+                    "bank": "Societe Generale de Banques En Cote D Ivoire - Ivory Coast",
+                    "CCY": "XOF",
+                    "ARE": "412W",
+                    "are_name": "Ivory Coast",
+                    "country": "Ivory Coast",
+                    "currency": "XOF",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "013640010630013020011392MAD",
+                    "bank": "Banque Marocaine Pour Le Commerce - Morocco",
+                    "CCY": "MAD",
+                    "ARE": "452D",
+                    "are_name": "Morocco",
+                    "country": "Morocco",
+                    "currency": "MAD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "100010771875",
+                    "bank": "Commercial International Bank (Egypt) S.A.E. (German Chamber Branch)",
+                    "CCY": "EGP",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "1000370267EUR",
+                    "bank": "Standard Bank De Angola S.A.",
+                    "CCY": "EUR",
+                    "ARE": "519G",
+                    "are_name": "Angola",
+                    "country": "Angola",
+                    "currency": "AOA",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "1000390095KWD",
+                    "bank": "National Bank of Kuwait",
+                    "CCY": "KWD",
+                    "ARE": "4732",
+                    "are_name": "Siemens Electrical & Electronic Services K.S.C.C.",
+                    "country": "KW",
+                    "currency": "KWD",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "100133016",
+                    "bank": "Citi Bank",
+                    "CCY": "KWD",
+                    "ARE": "4732",
+                    "are_name": "Siemens Electrical & Electronic Services K.S.C.C.",
+                    "country": "KW",
+                    "currency": "KWD",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "100542013AED",
+                    "bank": "Citi Bank UAE",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "100542064EUR",
+                    "bank": "Citi Bank UAE",
+                    "CCY": "EUR",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "100542072USD",
+                    "bank": "Citi Bank UAE",
+                    "CCY": "USD",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "100547015",
+                    "bank": "Citi Bank Egypt",
+                    "CCY": "GBP",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "100547031USD",
+                    "bank": "Citi Bank Egypt",
+                    "CCY": "USD",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "100547058EUR",
+                    "bank": "Citi Bank Egypt",
+                    "CCY": "EUR",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "100547252SEK",
+                    "bank": "Citi Bank Egypt",
+                    "CCY": "SEK",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "100547538",
+                    "bank": "Citi Bank Egypt",
+                    "CCY": "EGP",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "101796009001EGP",
+                    "bank": "Bank of Alexandria S A E",
+                    "CCY": "EGP",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "101796009002USD",
+                    "bank": "Bank of Alexandria S A E",
+                    "CCY": "USD",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "101796009003EUR",
+                    "bank": "Bank of Alexandria S A E",
+                    "CCY": "EUR",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "101796009004",
+                    "bank": "Bank of Alexandria S A E",
+                    "CCY": "EGP",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "1103078701OMR",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "OMR",
+                    "ARE": "463G",
+                    "are_name": "Siemens Energy WLL",
+                    "country": "OM",
+                    "currency": "OMR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "120055208USD",
+                    "bank": "Citi Bank UAE - Main Entity",
+                    "CCY": "USD",
+                    "ARE": "523S",
+                    "are_name": "Dresser-Rand Field Operations Middle East LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "120055216EUR",
+                    "bank": "Citi Bank UAE - Main Entity",
+                    "CCY": "EUR",
+                    "ARE": "523S",
+                    "are_name": "Dresser-Rand Field Operations Middle East LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "1208947401",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "1229014",
+                    "bank": "Citibank Nigeria Limited LAGOS",
+                    "CCY": "NGN",
+                    "ARE": "5423",
+                    "are_name": "Nigeria",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "13640010636530820405892MAD",
+                    "bank": "Banque Marocaine Pour Le Commerce - Morocco",
+                    "CCY": "MAD",
+                    "ARE": "452D",
+                    "are_name": "Morocco",
+                    "country": "Morocco",
+                    "currency": "MAD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "1502804",
+                    "bank": "Standard Chartered ( Nigeria) Apapa",
+                    "CCY": "NGN",
+                    "ARE": "5423",
+                    "are_name": "Nigeria",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "22631",
+                    "bank": "Standard Chartered ( Nigeria) Apapa",
+                    "CCY": "NGN",
+                    "ARE": "5423",
+                    "are_name": "Nigeria",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "22655EUR",
+                    "bank": "Standard Chartered ( Nigeria) Apapa",
+                    "CCY": "EUR",
+                    "ARE": "5423",
+                    "are_name": "Nigeria",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "22662USD",
+                    "bank": "Standard Chartered ( Nigeria) Apapa",
+                    "CCY": "USD",
+                    "ARE": "5423",
+                    "are_name": "Nigeria",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "257782701167",
+                    "bank": "BPC-BANCO DE POUPANCA E CREDITO",
+                    "CCY": "AOA",
+                    "ARE": "519G",
+                    "are_name": "Angola",
+                    "country": "Angola",
+                    "currency": "AOA",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "3000759000",
+                    "bank": "Deutsche Bank",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "3020489590440",
+                    "bank": "Riyad Bank",
+                    "CCY": "USD",
+                    "ARE": "516S",
+                    "are_name": "Dresser-Rand Arabia LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "3020489599940",
+                    "bank": "Riyad Bank",
+                    "CCY": "SAR",
+                    "ARE": "516S",
+                    "are_name": "Dresser-Rand Arabia LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "3159605910130",
+                    "bank": "BANCO PRIVADO ATLANTICO",
+                    "CCY": "AOA",
+                    "ARE": "519G",
+                    "are_name": "Angola",
+                    "country": "Angola",
+                    "currency": "AOA",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "3301103078701",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "EUR",
+                    "ARE": "463G",
+                    "are_name": "Siemens Energy WLL",
+                    "country": "OM",
+                    "currency": "OMR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "3607777001",
+                    "bank": "Saudi British Bank - The Saudi Awwal Bank",
+                    "CCY": "SAR",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "383-9422-12141618-1",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "383-9422-12141618-2",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "383-9422-12141618-5",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "383.303.12141618.1",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "IRR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "383.303.12141618.2",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "IRR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "383.312.12141618.1",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "IRR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "383.312.12141618.2",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "IRR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "383110121416181IRR",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "IRR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "3837160121416181",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "3837200121416181",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "3837200121416182EUR",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "476230031200146EUR",
+                    "bank": "BNP Paribas",
+                    "CCY": "EUR",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "476230031200146USD",
+                    "bank": "BNP Paribas",
+                    "CCY": "USD",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "499000026905",
+                    "bank": "Emirates National Bank of Dubai",
+                    "CCY": "EGP",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "5010844126XAF",
+                    "bank": "Societe Generale de Banques au Came - Cameroon",
+                    "CCY": "XOF",
+                    "ARE": "412W",
+                    "are_name": "Ivory Coast",
+                    "country": "Ivory Coast",
+                    "currency": "XOF",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "5194006",
+                    "bank": "Citibank N.A., Building No. 1 Idowy Taylor Street",
+                    "CCY": "NGN",
+                    "ARE": "490S",
+                    "are_name": "Nigeria - ARE Under Liquidation",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "5194013NGN",
+                    "bank": "Citibank Nigeria Limited Port Harcourt",
+                    "CCY": "NGN",
+                    "ARE": "490S",
+                    "are_name": "Nigeria - ARE Under Liquidation",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "5500061531",
+                    "bank": "First Abu Dhabi Bank - Egypt",
+                    "CCY": "EGP",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "60000700494039",
+                    "bank": "Citi Bank Bahrain",
+                    "CCY": "USD",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "6069500127AED",
+                    "bank": "BNP Paribas",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "611-613-2384109-2",
+                    "bank": "Saman Bank Corporation",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "611-613-2384109-4",
+                    "bank": "Saman Bank Corporation",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "611-613-2384109-5",
+                    "bank": "Saman Bank Corporation",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "6114023841091",
+                    "bank": "Saman Bank Corporation",
+                    "CCY": "IRR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "61174123841091",
+                    "bank": "Saman Bank Corporation",
+                    "CCY": "EUR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "6207846168",
+                    "bank": "First Abu Dhabi Bank",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "65710200827",
+                    "bank": "Citibank Int. Plc - France",
+                    "CCY": "USD",
+                    "ARE": "490S",
+                    "are_name": "Nigeria - ARE Under Liquidation",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "6800009849",
+                    "bank": "First Abu Dhabi Bank",
+                    "CCY": "KWD",
+                    "ARE": "4732",
+                    "are_name": "Siemens Electrical & Electronic Services K.S.C.C.",
+                    "country": "KW",
+                    "currency": "KWD",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "9040004006016",
+                    "bank": "Stanbic Bank - Ghana",
+                    "CCY": "GHS",
+                    "ARE": "461T",
+                    "are_name": "Ghana",
+                    "country": "Ghana",
+                    "currency": "GHS",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "940004006105",
+                    "bank": "Stanbic Bank - Ghana",
+                    "CCY": "USD",
+                    "ARE": "461T",
+                    "are_name": "Ghana",
+                    "country": "Ghana",
+                    "currency": "GHS",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "ABDISD10016071SDG",
+                    "bank": "Abu Dhabi Islamic Bank - Sudan",
+                    "CCY": "SDG",
+                    "ARE": "548X",
+                    "are_name": "Siemens Energy LLC Sudan Branch",
+                    "country": "SD",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "ABDISD10016084AED",
+                    "bank": "Abu Dhabi Islamic Bank - Sudan",
+                    "CCY": "AED",
+                    "ARE": "548X",
+                    "are_name": "Siemens Energy LLC Sudan Branch",
+                    "country": "SD",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "AE130260001015367726601AED",
+                    "bank": "Emirates National Bank",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "AE160500000000028676960EUR",
+                    "bank": "Abu Dhabi Islamic Bank - UAE",
+                    "CCY": "EUR",
+                    "ARE": "548X",
+                    "are_name": "Siemens Energy LLC Sudan Branch",
+                    "country": "SD",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "AE260440000001700027601AED",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "AED",
+                    "ARE": "523S",
+                    "are_name": "Dresser-Rand Field Operations Middle East LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "AE400030011612692920001AED",
+                    "bank": "Abu Dhabi Commercial Bank",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "AE400500000000028520746AED",
+                    "bank": "Abu Dhabi Islamic Bank - UAE",
+                    "CCY": "AED",
+                    "ARE": "548X",
+                    "are_name": "Siemens Energy LLC Sudan Branch",
+                    "country": "SD",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "AE430230000001009685999AED",
+                    "bank": "Commercial Bank of Dubai",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "AE550240001520171193201AED",
+                    "bank": "Dubai Islamic Bank",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "AE810920000040000004543AED",
+                    "bank": "Gulf International Bank ",
+                    "CCY": "AED",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "AO06006001900103790100407AOA",
+                    "bank": "Standard Bank De Angola S.A.",
+                    "CCY": "AOA",
+                    "ARE": "519G",
+                    "are_name": "Angola",
+                    "country": "Angola",
+                    "currency": "AOA",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "AO06006001900103794100687USD",
+                    "bank": "Standard Bank De Angola S.A.",
+                    "CCY": "USD",
+                    "ARE": "519G",
+                    "are_name": "Angola",
+                    "country": "Angola",
+                    "currency": "AOA",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "BBMEQA1787100001QAR",
+                    "bank": "Siemens Energy WLL",
+                    "CCY": "QAR",
+                    "ARE": "519x",
+                    "are_name": "Siemens Energy WLL",
+                    "country": "QA",
+                    "currency": "QAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "BCMACG90000319417XAF",
+                    "bank": "Credit du Congo",
+                    "CCY": "XAF",
+                    "ARE": "412W",
+                    "are_name": "Ivory Coast",
+                    "country": "Ivory Coast",
+                    "currency": "XOF",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "BH58SCBLBHD01140191501BHD",
+                    "bank": "Standard Chartered Bank Bahrain",
+                    "CCY": "BHD",
+                    "ARE": "4678",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "AE",
+                    "currency": "AED",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "BKBPIR3838100121416181IRR",
+                    "bank": "BANK PASARGAD",
+                    "CCY": "IRR",
+                    "ARE": "5665",
+                    "are_name": "Siemens Sherkate Sahami (Khass)",
+                    "country": "IR",
+                    "currency": "IRR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "BNPADZ02700780000033500108DZD",
+                    "bank": "BNP",
+                    "CCY": "DZD",
+                    "ARE": "4PD3",
+                    "are_name": "Algeria",
+                    "country": "Algeria",
+                    "currency": "DZD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "BSHROM101020083731OMR",
+                    "bank": "Sohar Bank",
+                    "CCY": "OMR",
+                    "ARE": "463G",
+                    "are_name": "Siemens Energy WLL",
+                    "country": "OM",
+                    "currency": "OMR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "CITIDZ01200001000736901869DZD",
+                    "bank": "Citi Bank - Algeria",
+                    "CCY": "DZD",
+                    "ARE": "4PD3",
+                    "are_name": "Algeria",
+                    "country": "Algeria",
+                    "currency": "DZD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "CITIDZ01200001000736903421DZD",
+                    "bank": "Citi Bank - Algeria",
+                    "CCY": "DZD",
+                    "ARE": "4PD3",
+                    "are_name": "Algeria",
+                    "country": "Algeria",
+                    "currency": "DZD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "CITIEGCXXXX100547EGP",
+                    "bank": "Citi Bank Egypt",
+                    "CCY": "EGP",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "CITING1229980USD",
+                    "bank": "Citibank Nigeria Limited LAGOS",
+                    "CCY": "USD",
+                    "ARE": "5423",
+                    "are_name": "Nigeria",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "EG230011000100001601500022902EUR",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "EUR",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "EG490014001100003329000026992EUR",
+                    "bank": "Emirates National Bank of Dubai",
+                    "CCY": "EUR",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "EG760011000100000001500022901EGP",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "EGP",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "EG760014001100003329000026991USD",
+                    "bank": "Emirates National Bank of Dubai",
+                    "CCY": "USD",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "EG810011000100000101500022903USD",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "USD",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "EG960043000200000000100547066EUR",
+                    "bank": "Citi Bank Egypt",
+                    "CCY": "EUR",
+                    "ARE": "5402",
+                    "are_name": "Siemens Technologies S.A.E.",
+                    "country": "EG",
+                    "currency": "EGP",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "GHCBGH1261130002426GHS",
+                    "bank": "Ghana Commercial Bank",
+                    "CCY": "GHS",
+                    "ARE": "461T",
+                    "are_name": "Ghana",
+                    "country": "Ghana",
+                    "currency": "GHS",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "KW26NBOK0000000000002040471132KWD",
+                    "bank": "National Bank Kuwait",
+                    "CCY": "KWD",
+                    "ARE": "4PB7",
+                    "are_name": "Siemens Energy Services for Repair and Maintenance of Light and Heavy Equipment WLL",
+                    "country": "KW",
+                    "currency": "KWD",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "KW28CITI0000000000000107972005KWD",
+                    "bank": "Citi Bank",
+                    "CCY": "KWD",
+                    "ARE": "4PB7",
+                    "are_name": "Siemens Energy Services for Repair and Maintenance of Light and Heavy Equipment WLL",
+                    "country": "KW",
+                    "currency": "KWD",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "MZ59000301080866275100496MZN",
+                    "bank": "Standard Bank SARL - Mozambique",
+                    "CCY": "MZN",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "MZ59000301080866275101272USD",
+                    "bank": "Standard Bank SARL - Mozambique",
+                    "CCY": "USD",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "NATXDZ02000168777945200112DZD",
+                    "bank": "Natixis",
+                    "CCY": "DZD",
+                    "ARE": "4PD3",
+                    "are_name": "Algeria",
+                    "country": "Algeria",
+                    "currency": "DZD",
+                    "region": "Africa"
+                }
+            ]
+        }
+    }
+}

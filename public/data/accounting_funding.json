@@ -1,0 +1,251 @@
+{
+    "data": {
+        "accounting_fundings": {
+            "items": [
+                {
+                    "ARE_Code": "463G",
+                    "CCY": "OMR",
+                    "Purpose": "Buffer",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1103078701",
+                    "Amount": 60000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "463G",
+                    "CCY": "OMR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1103078701",
+                    "Amount": 3251.47,
+                    "date": "2026-02-23T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "463G",
+                    "CCY": "OMR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1103078701",
+                    "Amount": 73775.84,
+                    "date": "2026-02-27T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "463G",
+                    "CCY": "OMR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1103078701",
+                    "Amount": 720,
+                    "date": "2026-02-24T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "463G",
+                    "CCY": "OMR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1103078701",
+                    "Amount": 13657.109,
+                    "date": "2026-02-25T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "463G",
+                    "CCY": "OMR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1103078701",
+                    "Amount": 2605.84,
+                    "date": "2026-02-26T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "463G",
+                    "CCY": "OMR",
+                    "Purpose": "Buffer",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1103078701",
+                    "Amount": 60000,
+                    "date": "2026-02-22T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4659",
+                    "CCY": "SAR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "BNP PARIBAS",
+                    "IBAN": "30031200146SAR",
+                    "Amount": 11500000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4659",
+                    "CCY": "SAR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "BNP PARIBAS",
+                    "IBAN": "30031200146SAR",
+                    "Amount": 344927.35,
+                    "date": "2026-02-27T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4659",
+                    "CCY": "SAR",
+                    "Purpose": "Buffer",
+                    "Bank_Name": "BNP PARIBAS",
+                    "IBAN": "30031200146SAR",
+                    "Amount": 1000000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4659",
+                    "CCY": "SAR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "BNP PARIBAS",
+                    "IBAN": "30031200146SAR",
+                    "Amount": 36466.5,
+                    "date": "2026-02-23T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4659",
+                    "CCY": "SAR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "BNP PARIBAS",
+                    "IBAN": "30031200146SAR",
+                    "Amount": 13058.39,
+                    "date": "2026-02-24T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4659",
+                    "CCY": "SAR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "BNP PARIBAS",
+                    "IBAN": "30031200146SAR",
+                    "Amount": 7646185.51,
+                    "date": "2026-02-25T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4678 - SCB",
+                    "CCY": "AED",
+                    "Purpose": "HR Allowance payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "01208947401",
+                    "Amount": 883666.05,
+                    "date": "2026-02-25T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4678 - SCB",
+                    "CCY": "AED",
+                    "Purpose": "Buffer",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "01208947401",
+                    "Amount": 1500000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4678 - SCB",
+                    "CCY": "AED",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "01208947401",
+                    "Amount": 8200000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4678 - SCB",
+                    "CCY": "AED",
+                    "Purpose": "HR Allowance payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "01208947401",
+                    "Amount": 500000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4678 - SCB",
+                    "CCY": "AED",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "01208947401",
+                    "Amount": 1285741.57,
+                    "date": "2026-02-25T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4732",
+                    "CCY": "KWD",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": null,
+                    "IBAN": "SFS",
+                    "Amount": 60000,
+                    "date": "2026-02-22T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4732",
+                    "CCY": "KWD",
+                    "Purpose": "Buffer",
+                    "Bank_Name": null,
+                    "IBAN": "SFS",
+                    "Amount": 60000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "4732",
+                    "CCY": "KWD",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": null,
+                    "IBAN": "SFS",
+                    "Amount": 13039.995,
+                    "date": "2026-02-23T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "519X",
+                    "CCY": "QAR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "01-4716450-01",
+                    "Amount": 4800000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "519X",
+                    "CCY": "QAR",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "01-4716450-01",
+                    "Amount": 1017146.61,
+                    "date": "2026-02-25T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "519X",
+                    "CCY": "QAR",
+                    "Purpose": "Buffer",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "01-4716450-01",
+                    "Amount": 1000000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "523S01",
+                    "CCY": "AED",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1700027601",
+                    "Amount": 155000,
+                    "date": "2026-03-01T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "523S01",
+                    "CCY": "AED",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1700027601",
+                    "Amount": 71314.85,
+                    "date": "2026-02-24T00:00:00.000Z"
+                },
+                {
+                    "ARE_Code": "523S01",
+                    "CCY": "AED",
+                    "Purpose": "Supplier Payment",
+                    "Bank_Name": "Standard Chartered",
+                    "IBAN": "1700027601",
+                    "Amount": 50000,
+                    "date": "2026-02-22T00:00:00.000Z"
+                }
+            ]
+        }
+    }
+}

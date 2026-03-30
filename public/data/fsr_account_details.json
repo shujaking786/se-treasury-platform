@@ -1,0 +1,128 @@
+{
+    "data": {
+        "fsr_account_details": {
+            "items": [
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "External",
+                    "Bank_Name": null,
+                    "Account": "CITIZA202216005ZAR",
+                    "CCY": "ZAR",
+                    "Closing_Balance": 8165142.16,
+                    "Closing_Balance_EUR": 428346.62,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                },
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "External",
+                    "Bank_Name": "Stanbic Bank Zimbabwe",
+                    "Account": "SBICZW9140003517380ZWG",
+                    "CCY": "ZWG",
+                    "Closing_Balance": 195771.62,
+                    "Closing_Balance_EUR": 6385.52,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                },
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "Internal",
+                    "Bank_Name": null,
+                    "Account": "25399100478QEUR596D",
+                    "CCY": "EUR",
+                    "Closing_Balance": -296114.62,
+                    "Closing_Balance_EUR": -296114.62,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                },
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "Internal",
+                    "Bank_Name": null,
+                    "Account": "25399100478QCAD596D",
+                    "CCY": "CAD",
+                    "Closing_Balance": 0,
+                    "Closing_Balance_EUR": 0,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                },
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "Internal",
+                    "Bank_Name": null,
+                    "Account": "25399100478QEUR583E",
+                    "CCY": "EUR",
+                    "Closing_Balance": -3486836.39,
+                    "Closing_Balance_EUR": -3486836.39,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                },
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "Internal",
+                    "Bank_Name": null,
+                    "Account": "25399100478QSEK596D",
+                    "CCY": "SEK",
+                    "Closing_Balance": 10610516.74,
+                    "Closing_Balance_EUR": 992424.97,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                },
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "Internal",
+                    "Bank_Name": null,
+                    "Account": "25399100478QMXN596D",
+                    "CCY": "MXN",
+                    "Closing_Balance": -34.95,
+                    "Closing_Balance_EUR": -1.72,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                },
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "Internal",
+                    "Bank_Name": null,
+                    "Account": "25399100478QUSD596D",
+                    "CCY": "USD",
+                    "Closing_Balance": 2250009.39,
+                    "Closing_Balance_EUR": 1914412.84,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                },
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "External",
+                    "Bank_Name": "Standard Bank of South-Africa - South Africa",
+                    "Account": "SBZAZA330815172ZAR",
+                    "CCY": "ZAR",
+                    "Closing_Balance": 407904.83,
+                    "Closing_Balance_EUR": 21398.85,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                },
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "Account_Type": "Internal",
+                    "Bank_Name": null,
+                    "Account": "25399100478QUSD583E",
+                    "CCY": "USD",
+                    "Closing_Balance": 0,
+                    "Closing_Balance_EUR": 0,
+                    "Closing_Balance_Local_CCY": null,
+                    "Local_CCY": null
+                }
+            ]
+        }
+    }
+}

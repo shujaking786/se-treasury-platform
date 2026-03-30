@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link id="app-favicon" rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SE Treasury Intelligence Platform - MEA</title>
+    <script>
+      try {
+        const persisted = JSON.parse(localStorage.getItem('se-treasury-platform-ui') || 'null');
+        const brandMode = persisted?.state?.brandMode;
+
+        if (brandMode === 'siemens-energy') {
+          document.documentElement.dataset.brand = brandMode;
+          const favicon = document.getElementById('app-favicon');
+          if (favicon) {
+            favicon.setAttribute('href', '/favicon-se.svg');
+          }
+        }
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

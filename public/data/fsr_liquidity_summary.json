@@ -1,0 +1,118 @@
+{
+    "data": {
+        "fsr_liquidity_summaries": {
+            "items": [
+                {
+                    "ARE_Code": null,
+                    "Entity_Name": null,
+                    "External_Liquidity": 456130.99,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 2906837.81,
+                    "Internal_Debt": -3782952.73,
+                    "Total_Liquidity": 3362968.8,
+                    "Total_Debt": -3782952.73,
+                    "Net_Position": -419983.9300000006
+                },
+                {
+                    "ARE_Code": "2AEG",
+                    "Entity_Name": null,
+                    "External_Liquidity": 0,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 0,
+                    "Internal_Debt": 0,
+                    "Total_Liquidity": 0,
+                    "Total_Debt": 0,
+                    "Net_Position": 0
+                },
+                {
+                    "ARE_Code": "404Q",
+                    "Entity_Name": null,
+                    "External_Liquidity": 114291.09,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 869075518.3599999,
+                    "Internal_Debt": -29553.6,
+                    "Total_Liquidity": 869189809.4499999,
+                    "Total_Debt": -29553.6,
+                    "Net_Position": 869160255.8499999
+                },
+                {
+                    "ARE_Code": "405Q",
+                    "Entity_Name": null,
+                    "External_Liquidity": 0,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 9744599.27,
+                    "Internal_Debt": -247705.38,
+                    "Total_Liquidity": 9744599.27,
+                    "Total_Debt": -247705.38,
+                    "Net_Position": 9496893.889999999
+                },
+                {
+                    "ARE_Code": "407K",
+                    "Entity_Name": null,
+                    "External_Liquidity": 0,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 0,
+                    "Internal_Debt": -3515616.98,
+                    "Total_Liquidity": 0,
+                    "Total_Debt": -3515616.98,
+                    "Net_Position": -3515616.98
+                },
+                {
+                    "ARE_Code": "412W",
+                    "Entity_Name": "Ivory Coast",
+                    "External_Liquidity": 31244812.11,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 0,
+                    "Internal_Debt": -25392851.67,
+                    "Total_Liquidity": 31244812.11,
+                    "Total_Debt": -25392851.67,
+                    "Net_Position": 5851960.440000001
+                },
+                {
+                    "ARE_Code": "412X",
+                    "Entity_Name": null,
+                    "External_Liquidity": 0,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 18290802.15,
+                    "Internal_Debt": 0,
+                    "Total_Liquidity": 18290802.15,
+                    "Total_Debt": 0,
+                    "Net_Position": 18290802.15
+                },
+                {
+                    "ARE_Code": "415A",
+                    "Entity_Name": null,
+                    "External_Liquidity": 0,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 3170606.9,
+                    "Internal_Debt": 0,
+                    "Total_Liquidity": 3170606.9,
+                    "Total_Debt": 0,
+                    "Net_Position": 3170606.9
+                },
+                {
+                    "ARE_Code": "416Q",
+                    "Entity_Name": null,
+                    "External_Liquidity": 50457.63,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 0,
+                    "Internal_Debt": -30827.8,
+                    "Total_Liquidity": 50457.63,
+                    "Total_Debt": -30827.8,
+                    "Net_Position": 19629.83
+                },
+                {
+                    "ARE_Code": "426F",
+                    "Entity_Name": null,
+                    "External_Liquidity": 117.34,
+                    "External_Debt": 0,
+                    "Internal_Liquidity": 20654498.26,
+                    "Internal_Debt": -10519357.97,
+                    "Total_Liquidity": 20654615.6,
+                    "Total_Debt": -10519357.97,
+                    "Net_Position": 10135257.63
+                }
+            ]
+        }
+    }
+}
