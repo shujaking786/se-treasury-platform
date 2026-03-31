@@ -1,4 +1,4 @@
-import { useEffect, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   getSidebarSections,
@@ -6,15 +6,23 @@ import {
   isSectionFullyActive,
   isSectionPartiallyActive,
 } from '../selectors/sidebar';
+import {
+  ACCOUNTS_FILTERS_UPDATED_EVENT,
+  getAccountsSidebarSections,
+  getAccountsSidebarViewCounts,
+  getFallbackAccountFilterRecords,
+  loadAccountFilterRecords,
+  type AccountFilterRecord,
+} from '../selectors/accountsFilters';
 import type { SidebarSection } from '../selectors/sidebar';
 import { useStore } from '../store';
 import type { DashboardFilterValue, ViewMode } from '../types';
 
-const viewModes: { mode: ViewMode; icon: string; label: string; count: number }[] = [
-  { mode: 'region', icon: '\u25C9', label: 'Region', count: 2 },
-  { mode: 'country', icon: '\u25CE', label: 'Country', count: 16 },
-  { mode: 'are', icon: '\u25CB', label: 'ARE', count: 22 },
-  { mode: 'bankingPartner', icon: '\u25C7', label: 'Banking Partner', count: 16 },
+const baseViewModes: { mode: ViewMode; icon: string; label: string }[] = [
+  { mode: 'region', icon: '\u25C9', label: 'Region' },
+  { mode: 'country', icon: '\u25CE', label: 'Country' },
+  { mode: 'are', icon: '\u25CB', label: 'ARE' },
+  { mode: 'bankingPartner', icon: '\u25C7', label: 'Banking Partner' },
 ];
 
 const sectionHeadingStyle: CSSProperties = {
@@ -190,7 +198,51 @@ export function Sidebar() {
     closeSidebar,
   } = useStore();
   const location = useLocation();
-  const sections = getSidebarSections(sidebarViewMode, activeFilters);
+  const isAccountsRoute = location.pathname.startsWith('/accounts');
+  const [accountFilterRecords, setAccountFilterRecords] = useState<AccountFilterRecord[]>(getFallbackAccountFilterRecords());
+
+  useEffect(() => {
+    if (!isAccountsRoute) return;
+
+    let isMounted = true;
+    const refreshAccountFilterRecords = () => {
+      loadAccountFilterRecords().then((records) => {
+        if (isMounted) {
+          setAccountFilterRecords(records);
+        }
+      });
+    };
+
+    refreshAccountFilterRecords();
+    window.addEventListener(ACCOUNTS_FILTERS_UPDATED_EVENT, refreshAccountFilterRecords);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener(ACCOUNTS_FILTERS_UPDATED_EVENT, refreshAccountFilterRecords);
+    };
+  }, [isAccountsRoute]);
+
+  const sections = isAccountsRoute
+    ? getAccountsSidebarSections(sidebarViewMode, activeFilters, accountFilterRecords) as SidebarSection[]
+    : getSidebarSections(sidebarViewMode, activeFilters);
+
+  const viewCounts = useMemo(() => {
+    if (!isAccountsRoute) {
+      return {
+        region: 2,
+        country: 16,
+        are: 22,
+        bankingPartner: 16,
+      } as const;
+    }
+
+    return getAccountsSidebarViewCounts(accountFilterRecords);
+  }, [isAccountsRoute, accountFilterRecords]);
+
+  const viewModes = useMemo(
+    () => baseViewModes.map((mode) => ({ ...mode, count: viewCounts[mode.mode] ?? 0 })),
+    [viewCounts],
+  );
 
   useEffect(() => {
     closeSidebar();

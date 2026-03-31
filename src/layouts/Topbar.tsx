@@ -1,9 +1,8 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { NAV_TABS } from '../constants';
 import { useStore } from '../store';
 
 export function Topbar() {
-  const navigate = useNavigate();
   const { toggleSidebar, brandMode, toggleBrandMode } = useStore();
   const today = new Date().toISOString().split('T')[0];
   const isSiemensBrand = brandMode === 'siemens-energy';
@@ -177,37 +176,6 @@ export function Topbar() {
           <span>Brand</span>
           <span style={{ color: 'var(--color-accent)' }}>{isSiemensBrand ? 'Siemens Energy' : 'Original'}</span>
         </button>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            backgroundColor: 'var(--color-status-red-bg)',
-            border: '1px solid rgba(239,68,68,0.3)',
-            borderRadius: 20,
-            paddingLeft: 10,
-            paddingRight: 10,
-            paddingTop: 4,
-            paddingBottom: 4,
-            fontFamily: 'var(--font-mono)',
-            fontSize: 10,
-            fontWeight: 600,
-            color: 'var(--color-status-red)',
-            cursor: 'pointer',
-          }}
-          onClick={() => navigate('/limits')}
-        >
-          <span style={{
-            width: 6,
-            height: 6,
-            borderRadius: 9999,
-            backgroundColor: 'var(--color-status-red)',
-            animation: 'pulse-dot 1.5s infinite',
-            display: 'inline-block',
-          }} />
-          {/* Responsive behavior removed (was hidden sm:inline / sm:hidden), showing desktop version */}
-          <span>2 LIMIT BREACHES</span>
-        </div>
         {/* Responsive behavior removed (was hidden lg:block), showing by default */}
         <div style={{
           fontFamily: 'var(--font-mono)',
@@ -215,14 +183,6 @@ export function Topbar() {
           color: 'var(--color-muted)',
         }}>
           Report Date <span style={{ color: 'var(--color-text-primary)' }}>{today}</span>
-        </div>
-        {/* Responsive behavior removed (was hidden xl:block), showing by default */}
-        <div style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 10,
-          color: 'var(--color-muted)',
-        }}>
-          Next Refresh <span style={{ color: 'var(--color-text-primary)' }}>09:00 CET</span>
         </div>
       </div>
     </div>

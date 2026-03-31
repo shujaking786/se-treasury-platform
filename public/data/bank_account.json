@@ -1001,6 +1001,406 @@
                     "country": "Algeria",
                     "currency": "DZD",
                     "region": "Africa"
+                },
+                {
+                    "account_name": "PK28SCBL0001679702968101EUR",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "EUR",
+                    "ARE": "4PD4",
+                    "are_name": "Siemens Energy Pakistan",
+                    "country": "PK",
+                    "currency": "PKR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "PK36MPBL9964177140479910PKR",
+                    "bank": "Habibi Metro",
+                    "CCY": "PKR",
+                    "ARE": "4PD4",
+                    "are_name": "Siemens Energy Pakistan",
+                    "country": "PK",
+                    "currency": "PKR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "PK81MEZN0099520110681360PKR",
+                    "bank": "Meezan",
+                    "CCY": "PKR",
+                    "ARE": "4PD4",
+                    "are_name": "Siemens Energy Pakistan",
+                    "country": "PK",
+                    "currency": "PKR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "PK83FAYS3554301000012120PKR",
+                    "bank": "Faysal Bank",
+                    "CCY": "PKR",
+                    "ARE": "4PD4",
+                    "are_name": "Siemens Energy Pakistan",
+                    "country": "PK",
+                    "currency": "PKR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "QA20SCBL000000000001474312101QAR",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "QAR",
+                    "ARE": "519x",
+                    "are_name": "Siemens Energy WLL",
+                    "country": "QA",
+                    "currency": "QAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "QA44SCBL000000004701471645001GBP",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "GBP",
+                    "ARE": "519x",
+                    "are_name": "Siemens Energy WLL",
+                    "country": "QA",
+                    "currency": "QAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "QA46SCBL000000000101471645001USD",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "USD",
+                    "ARE": "519x",
+                    "are_name": "Siemens Energy WLL",
+                    "country": "QA",
+                    "currency": "QAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "QA58SCBL000000001601471645001EUR",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "EUR",
+                    "ARE": "519x",
+                    "are_name": "Siemens Energy WLL",
+                    "country": "QA",
+                    "currency": "QAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "QA84SCBL000000000001471645001QAR",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "QAR",
+                    "ARE": "519x",
+                    "are_name": "Siemens Energy WLL",
+                    "country": "QA",
+                    "currency": "QAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SA1345000000003607777081EUR",
+                    "bank": "Saudi British Bank - The Saudi Awwal Bank",
+                    "CCY": "EUR",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SA30031200146SAR",
+                    "bank": "BNP Paribas",
+                    "CCY": "SAR",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SA4045000000003607777080USD",
+                    "bank": "Saudi British Bank - The Saudi Awwal Bank",
+                    "CCY": "USD",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SA4091000000001700122001SAR",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "SAR",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SA4195000001016061358801SAR",
+                    "bank": "Emirates Bank International",
+                    "CCY": "SAR",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SA9445000000003882545001SAR",
+                    "bank": "Saudi British Bank",
+                    "CCY": "SAR",
+                    "ARE": "4PD7",
+                    "are_name": "Siemens Energy Regional Head Quarters",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SA9473003351007008722013SAR",
+                    "bank": "First Abu Dhabi Bank",
+                    "CCY": "SAR",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SA9585476230081900142682SAR",
+                    "bank": "BNP Paribas",
+                    "CCY": "SAR",
+                    "ARE": "4PD7",
+                    "are_name": "Siemens Energy Regional Head Quarters",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SA9880000577608010263641SAR",
+                    "bank": "Alrajhi Banking And Investment Corporation",
+                    "CCY": "SAR",
+                    "ARE": "4659",
+                    "are_name": "Siemens Energy LLC",
+                    "country": "SA",
+                    "currency": "SAR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SBICCI91800000224845XOF",
+                    "bank": "Stanbic Bank SA - Ivory Coast",
+                    "CCY": "XAF",
+                    "ARE": "412W",
+                    "are_name": "Ivory Coast",
+                    "country": "Ivory Coast",
+                    "currency": "XOF",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBICGH9040008483439GHS",
+                    "bank": "Stanbic Bank - Ghana",
+                    "CCY": "GHS",
+                    "ARE": "543X",
+                    "are_name": "Ghana",
+                    "country": "South Africa",
+                    "currency": "GHS",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBICNG0063180133USD",
+                    "bank": "Stanbic IBTC Bank PLC Idejo",
+                    "CCY": "USD",
+                    "ARE": "5423",
+                    "are_name": "Nigeria",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBICNG40471467NGN",
+                    "bank": "Stanbic IBTC Bank PLC Idejo",
+                    "CCY": "NGN",
+                    "ARE": "5423",
+                    "are_name": "Nigeria",
+                    "country": "Nigeria",
+                    "currency": "NGN",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBICTZ9120002191308TZS",
+                    "bank": "Stanbic Bank Tanzania",
+                    "CCY": "TZS",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBICTZ9120002656912USD",
+                    "bank": "Stanbic Bank Tanzania",
+                    "CCY": "USD",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBICUG9030017828818UGX",
+                    "bank": "Stanbic Bank Uganda",
+                    "CCY": "UGX",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBICUG9030020303742USD",
+                    "bank": "Stanbic Bank Uganda",
+                    "CCY": "USD",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBICZW9140003517380ZWG",
+                    "bank": "Stanbic Bank Zimbabwe",
+                    "CCY": "ZWL",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA330804359ZAR",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "ZAR",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA330815172ZAR",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "ZAR",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA90847474GBP",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "GBP",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA90847482USD",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "USD",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA90847946EUR",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "EUR",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA90853962EUR",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "EUR",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA90853970GBP",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "GBP",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA90853989USD",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "USD",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA90858875EUR",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "EUR",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SBZAZA90867092EUR",
+                    "bank": "Standard Bank of South-Africa - South Africa",
+                    "CCY": "EUR",
+                    "ARE": "479X",
+                    "are_name": "South East Africa",
+                    "country": "TZ, UG, MO, ZW",
+                    "currency": "USD",
+                    "region": "Africa"
+                },
+                {
+                    "account_name": "SCBLPK01702968101PKR",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "PKR",
+                    "ARE": "4PD4",
+                    "are_name": "Siemens Energy Pakistan",
+                    "country": "PK",
+                    "currency": "PKR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SCBLPK79702968101USD",
+                    "bank": "Standard Chartered Bank",
+                    "CCY": "USD",
+                    "ARE": "4PD4",
+                    "are_name": "Siemens Energy Pakistan",
+                    "country": "PK",
+                    "currency": "PKR",
+                    "region": "MEA"
+                },
+                {
+                    "account_name": "SOGEDZ02100022113006463794DZD",
+                    "bank": "Societe Generale",
+                    "CCY": "DZD",
+                    "ARE": "4PD3",
+                    "are_name": "Algeria",
+                    "country": "Algeria",
+                    "currency": "DZD",
+                    "region": "Africa"
                 }
             ]
         }

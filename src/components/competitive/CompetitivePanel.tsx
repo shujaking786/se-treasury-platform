@@ -1,7 +1,5 @@
-import { AlertBanner } from '../ui/AlertBanner';
 import { SectionHeader } from '../ui/SectionHeader';
 import { DataCard } from '../ui/DataCard';
-import { competitiveAlerts } from '../../data';
 import { rippleProfile, seTreasuryProfile, comparisonCriteria, proofPoints } from '../../data';
 import { cn } from '../../utils/cn';
 import type { ComparisonResult } from '../../types';
@@ -15,8 +13,6 @@ const resultColors: Record<ComparisonResult, string> = {
 export function CompetitivePanel() {
   return (
     <div>
-      <AlertBanner alerts={competitiveAlerts} />
-
       {/* Two comparison cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
         {/* Ripple */}

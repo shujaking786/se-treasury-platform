@@ -46,13 +46,6 @@ const paginationBtnStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
-const paginationBtnActiveStyle: React.CSSProperties = {
-  ...paginationBtnStyle,
-  background: 'var(--color-accent)',
-  borderColor: 'var(--color-accent)',
-  color: 'white',
-};
-
 const paginationBtnDisabledStyle: React.CSSProperties = {
   ...paginationBtnStyle,
   opacity: 0.35,
@@ -79,16 +72,23 @@ export function FinancialSummaryPanel() {
 
   const enrichedLiquidity = useMemo(() => {
     const filtered = liquiditySummary.filter((item) => item.ARE_Code && matchesAreCode(activeFilters, item.ARE_Code));
-    return filtered.map((item) => ({
-      ...item,
-      Entity_Name: item.Entity_Name || entityLookup.get(item.ARE_Code) || item.Entity_Name,
-    }));
+    return filtered
+      .map((item) => ({
+        ...item,
+        Entity_Name: item.Entity_Name || entityLookup.get(item.ARE_Code) || item.Entity_Name,
+      }))
+      .filter((item) => Boolean(item.Entity_Name?.trim()));
   }, [liquiditySummary, activeFilters, entityLookup]);
 
-  const filteredAccounts = useMemo(
-    () => accountDetails.filter((item) => item.ARE_Code && item.ARE_Code.trim() !== '' && matchesAreCode(activeFilters, item.ARE_Code)),
-    [accountDetails, activeFilters],
-  );
+  const filteredAccounts = useMemo(() => (
+    accountDetails
+      .filter((item) => item.ARE_Code && item.ARE_Code.trim() !== '' && matchesAreCode(activeFilters, item.ARE_Code))
+      .map((item) => ({
+        ...item,
+        Entity_Name: item.Entity_Name || entityLookup.get(item.ARE_Code ?? '') || item.Entity_Name,
+      }))
+      .filter((item) => Boolean(item.Entity_Name?.trim()))
+  ), [accountDetails, activeFilters, entityLookup]);
 
   const externalAccounts = useMemo(
     () => filteredAccounts.filter((item) => item.Account_Type === 'External'),
@@ -181,14 +181,14 @@ export function FinancialSummaryPanel() {
         {extTotalPages > 1 && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
             <span className="font-mono text-[10px] text-muted">
-              Showing {(extPage - 1) * PAGE_SIZE + 1}\u2013{Math.min(extPage * PAGE_SIZE, externalAccounts.length)} of {externalAccounts.length}
+              Showing {(extPage - 1) * PAGE_SIZE + 1}{'\u2013'}{Math.min(extPage * PAGE_SIZE, externalAccounts.length)} of {externalAccounts.length}
             </span>
             <div style={{ display: 'flex', gap: 6 }}>
-              <button type="button" style={extPage === 1 ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={extPage === 1} onClick={() => setExtPage((p) => p - 1)}>&laquo; Prev</button>
-              {Array.from({ length: extTotalPages }, (_, i) => i + 1).map((p) => (
-                <button key={p} type="button" style={p === extPage ? paginationBtnActiveStyle : paginationBtnStyle} onClick={() => setExtPage(p)}>{p}</button>
-              ))}
-              <button type="button" style={extPage === extTotalPages ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={extPage === extTotalPages} onClick={() => setExtPage((p) => p + 1)}>Next &raquo;</button>
+              <button type="button" style={extPage === 1 ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={extPage === 1} onClick={() => setExtPage((p) => p - 1)}>Previous</button>
+              <span className="font-mono text-[10px] text-muted" style={{ alignSelf: 'center', minWidth: 44, textAlign: 'center' }}>
+                {extPage} / {extTotalPages}
+              </span>
+              <button type="button" style={extPage === extTotalPages ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={extPage === extTotalPages} onClick={() => setExtPage((p) => p + 1)}>Next</button>
             </div>
           </div>
         )}
@@ -233,14 +233,14 @@ export function FinancialSummaryPanel() {
         {intTotalPages > 1 && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
             <span className="font-mono text-[10px] text-muted">
-              Showing {(intPage - 1) * PAGE_SIZE + 1}\u2013{Math.min(intPage * PAGE_SIZE, internalAccounts.length)} of {internalAccounts.length}
+              Showing {(intPage - 1) * PAGE_SIZE + 1}{'\u2013'}{Math.min(intPage * PAGE_SIZE, internalAccounts.length)} of {internalAccounts.length}
             </span>
             <div style={{ display: 'flex', gap: 6 }}>
-              <button type="button" style={intPage === 1 ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={intPage === 1} onClick={() => setIntPage((p) => p - 1)}>&laquo; Prev</button>
-              {Array.from({ length: intTotalPages }, (_, i) => i + 1).map((p) => (
-                <button key={p} type="button" style={p === intPage ? paginationBtnActiveStyle : paginationBtnStyle} onClick={() => setIntPage(p)}>{p}</button>
-              ))}
-              <button type="button" style={intPage === intTotalPages ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={intPage === intTotalPages} onClick={() => setIntPage((p) => p + 1)}>Next &raquo;</button>
+              <button type="button" style={intPage === 1 ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={intPage === 1} onClick={() => setIntPage((p) => p - 1)}>Previous</button>
+              <span className="font-mono text-[10px] text-muted" style={{ alignSelf: 'center', minWidth: 44, textAlign: 'center' }}>
+                {intPage} / {intTotalPages}
+              </span>
+              <button type="button" style={intPage === intTotalPages ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={intPage === intTotalPages} onClick={() => setIntPage((p) => p + 1)}>Next</button>
             </div>
           </div>
         )}

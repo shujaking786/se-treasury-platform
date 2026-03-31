@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { AlertBanner } from '../ui/AlertBanner';
 import { KpiCard } from '../ui/KpiCard';
 import { DataCard } from '../ui/DataCard';
 import { LimitBar } from '../ui/LimitBar';
@@ -212,8 +211,6 @@ export function OverviewPanel() {
 
   return (
     <div>
-      <AlertBanner alerts={overview.alerts} />
-
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '14px', marginBottom: '24px', marginTop: '10px' }}>
         {overview.kpis.map((kpi) => (
           <KpiCard key={kpi.label} {...kpi} />

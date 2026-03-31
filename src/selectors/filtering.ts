@@ -1,45 +1,10 @@
 import { bankAccounts, countryPresence, legalEntities } from '../data';
 import type { DashboardFilterValue, DashboardFilters } from '../types';
+import { getAccountFilterCountryKey, getCachedAccountFilterRecords } from './accountsFilters';
+import { getCanonicalBankKey } from '../utils/bankNames';
 
 type FilterKind = DashboardFilterValue['kind'];
-
-function normalizeValue(value: string): string {
-  return value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-}
-
-export function getCanonicalBankKey(bankName: string): string {
-  const normalized = normalizeValue(bankName);
-
-  const aliasEntries: Array<[string[], string]> = [
-    [['standardcharteredbank', 'standardchartered', 'scb'], 'standardchartered'],
-    [['citibankegypt', 'citibank', 'citigroupinc', 'citi'], 'citigroup'],
-    [['bankofalexandria', 'alex'], 'bankofalexandria'],
-    [['emiratesnbd', 'enbd'], 'emiratesnbd'],
-    [['firstabudhabibank', 'fab'], 'firstabudhabi'],
-    [['saudiawwalbank', 'sab'], 'saudiawwalbank'],
-    [['saudibritishbank', 'sbb'], 'saudibritishbank'],
-    [['bnpparibas', 'bnp'], 'bnpparibas'],
-    [['riyadbank'], 'riyadbank'],
-    [['bankpasargad', 'pasargad'], 'bankpasargad'],
-    [['samanbank', 'saman'], 'samanbank'],
-    [['hsbc'], 'hsbc'],
-    [['alrajhibank', 'alrajhi'], 'alrajhibank'],
-    [['emiratesbankinternational', 'ebi'], 'emiratesbankinternational'],
-    [['cibegypt', 'cib'], 'cibegypt'],
-    [['societegenerale'], 'societegenerale'],
-    [['stdbankofsafrica', 'standardbankofsafrica'], 'standardbankofsafrica'],
-    [['nbkkuwait'], 'nbkkuwait'],
-    [['gulfbank'], 'gulfbank'],
-  ];
-
-  for (const [aliases, canonical] of aliasEntries) {
-    if (aliases.includes(normalized)) {
-      return canonical;
-    }
-  }
-
-  return normalized;
-}
+export { getCanonicalBankKey } from '../utils/bankNames';
 
 export function extractAreCode(value: string): string {
   const match = value.trim().match(/^[A-Za-z0-9]+/);
@@ -62,20 +27,34 @@ function getMatchingAreCodesForSingle(filter: DashboardFilterValue): Set<string>
 
   if (filter.kind === 'country') {
     const countryEntry = countryPresence.find((entry) => entry.countryCode === filter.countryCode);
+    const staticMatches = countryEntry
+      ? countryEntry.areCodes.map((code) => code.toUpperCase())
+      : legalEntities
+          .filter((entity) => entity.countryCode === filter.countryCode)
+          .map((entity) => entity.areCode.toUpperCase());
+    if (staticMatches.length > 0) {
+      return new Set(staticMatches);
+    }
+
     return new Set(
-      countryEntry
-        ? countryEntry.areCodes.map((code) => code.toUpperCase())
-        : legalEntities
-            .filter((entity) => entity.countryCode === filter.countryCode)
-            .map((entity) => entity.areCode.toUpperCase()),
+      getCachedAccountFilterRecords()
+        .filter((record) => getAccountFilterCountryKey(record.country) === filter.countryCode.toUpperCase())
+        .map((record) => record.areCode.toUpperCase()),
     );
   }
 
   // bankingPartner
+  const staticBankMatches = bankAccounts
+    .filter((account) => getCanonicalBankKey(account.bank) === getCanonicalBankKey(filter.bank))
+    .map((account) => account.areCode.toUpperCase());
+  if (staticBankMatches.length > 0) {
+    return new Set(staticBankMatches);
+  }
+
   return new Set(
-    bankAccounts
-      .filter((account) => getCanonicalBankKey(account.bank) === getCanonicalBankKey(filter.bank))
-      .map((account) => account.areCode.toUpperCase()),
+    getCachedAccountFilterRecords()
+      .filter((record) => getCanonicalBankKey(record.bank) === getCanonicalBankKey(filter.bank))
+      .map((record) => record.areCode.toUpperCase()),
   );
 }
 

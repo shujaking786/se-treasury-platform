@@ -1,9 +1,8 @@
-import { AlertBanner } from '../ui/AlertBanner';
 import { SectionHeader } from '../ui/SectionHeader';
 import { DataCard } from '../ui/DataCard';
 import { LimitBar } from '../ui/LimitBar';
 import { Pill } from '../ui/Pill';
-import { limitsAlerts, bankingPartnerLimits } from '../../data';
+import { bankingPartnerLimits } from '../../data';
 import { cn } from '../../utils/cn';
 import type { LimitStatus, StatusVariant } from '../../types';
 
@@ -46,7 +45,6 @@ function getPctColor(status: LimitStatus): string {
 export function LimitsPanel() {
   return (
     <div>
-      <AlertBanner alerts={limitsAlerts} />
       <SectionHeader title="Banking Partner Limit Utilization" action="Export Report" style={{ marginTop: 0 }} />
       <DataCard
         footer={

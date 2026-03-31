@@ -101,27 +101,39 @@ const modalOverlayStyle: React.CSSProperties = {
   justifyContent: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
 };
 const modalBoxStyle: React.CSSProperties = {
-  background: 'var(--color-surface)', border: '1px solid var(--color-border)',
+  background: 'var(--color-surface)', border: '1px solid var(--color-border-2)',
   borderRadius: 12, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
-  width: '100%', maxWidth: 560, margin: '0 16px',
+  width: '100%', maxWidth: 620, margin: '0 16px',
 };
 const modalHeaderStyle: React.CSSProperties = {
   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-  padding: '20px 28px', borderBottom: '1px solid var(--color-border)',
+  padding: '20px 28px', borderBottom: '1px solid var(--color-border-2)',
 };
 const modalTitleStyle: React.CSSProperties = {
   fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 700, color: 'white', letterSpacing: 0.5,
 };
 const modalFormStyle: React.CSSProperties = { padding: '24px 28px' };
-const modalGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 };
+const modalGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', columnGap: 20, rowGap: 18 };
+const fieldWrapperStyle: React.CSSProperties = { minWidth: 0 };
 const inputStyle: React.CSSProperties = {
-  width: '100%', background: 'var(--color-surface-2)', border: '1px solid var(--color-border)',
-  borderRadius: 6, padding: '10px 14px', fontFamily: 'var(--font-mono)', fontSize: 12, color: 'white', outline: 'none',
+  width: '100%', background: 'var(--color-surface-2)', border: '1px solid var(--color-border-2)',
+  borderRadius: 6, padding: '10px 14px', fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 1.4, color: 'white', outline: 'none', boxSizing: 'border-box',
 };
+const selectWrapperStyle: React.CSSProperties = { position: 'relative', width: '100%' };
 const selectStyle: React.CSSProperties = {
-  width: '100%', background: 'var(--color-surface-2)', border: '1px solid var(--color-border)',
+  width: '100%', background: 'var(--color-surface-2)', border: '1px solid var(--color-border-2)',
   borderRadius: 6, padding: '10px 36px 10px 14px', fontFamily: 'var(--font-mono)', fontSize: 12,
-  color: 'white', outline: 'none', appearance: 'auto' as const, cursor: 'pointer',
+  lineHeight: 1.4, color: 'white', outline: 'none', appearance: 'none' as const, WebkitAppearance: 'none', MozAppearance: 'none', cursor: 'pointer', boxSizing: 'border-box',
+};
+const selectArrowStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: '50%',
+  right: 14,
+  width: 12,
+  height: 12,
+  transform: 'translateY(-50%)',
+  pointerEvents: 'none',
+  color: 'var(--color-muted)',
 };
 const labelStyle: React.CSSProperties = {
   display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600,
@@ -129,11 +141,11 @@ const labelStyle: React.CSSProperties = {
 };
 const modalFooterStyle: React.CSSProperties = {
   display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 28, paddingTop: 20,
-  borderTop: '1px solid var(--color-border)',
+  borderTop: '1px solid var(--color-border-2)',
 };
 const cancelBtnStyle: React.CSSProperties = {
   padding: '10px 20px', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 0.5,
-  color: 'var(--color-muted)', border: '1px solid var(--color-border)', borderRadius: 6,
+  color: 'var(--color-muted)', border: '1px solid var(--color-border-2)', borderRadius: 6,
   background: 'transparent', cursor: 'pointer',
 };
 const submitBtnStyle: React.CSSProperties = {
@@ -154,6 +166,22 @@ interface AddAccountingFundingModalProps {
   bankOptions: DropdownOption[];
   ccyOptions: DropdownOption[];
   purposeOptions: DropdownOption[];
+}
+
+function ModalSelect({ value, onChange, options, placeholder = 'Select...', required = false }: { value: string; onChange: (value: string) => void; options: DropdownOption[]; placeholder?: string; required?: boolean }) {
+  return (
+    <div style={selectWrapperStyle}>
+      <select style={{ ...selectStyle, color: value ? 'white' : 'var(--color-muted)' }} value={value} onChange={(e) => onChange(e.target.value)} required={required}>
+        <option value="" disabled style={{ color: 'var(--color-muted)' }}>{placeholder}</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value} style={{ color: 'white', background: 'var(--color-surface-2)' }}>{option.label}</option>
+        ))}
+      </select>
+      <svg viewBox="0 0 12 12" aria-hidden="true" focusable="false" style={selectArrowStyle}>
+        <path d="M2.25 4.5 6 8.25 9.75 4.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
+  );
 }
 
 function AddAccountingFundingModal({ onClose, onSubmit, entityOptions, bankOptions, ccyOptions, purposeOptions }: AddAccountingFundingModalProps) {
@@ -179,71 +207,31 @@ function AddAccountingFundingModal({ onClose, onSubmit, entityOptions, bankOptio
         </div>
         <form onSubmit={handleSubmit} style={modalFormStyle}>
           <div style={modalGridStyle}>
-            <div>
+            <div style={fieldWrapperStyle}>
               <label style={labelStyle}>ARE Code</label>
-              <select
-                style={{ ...selectStyle, color: form.ARE_Code ? 'white' : 'var(--color-muted)' }}
-                value={form.ARE_Code}
-                onChange={(e) => handleChange('ARE_Code', e.target.value)}
-                required
-              >
-                <option value="" disabled style={{ color: 'var(--color-muted)' }}>Select entity...</option>
-                {entityOptions.map((o) => (
-                  <option key={o.value} value={o.value} style={{ color: 'white', background: 'var(--color-surface-2)' }}>{o.label}</option>
-                ))}
-              </select>
+              <ModalSelect value={form.ARE_Code} onChange={(value) => handleChange('ARE_Code', value)} options={entityOptions} placeholder="Select entity..." required />
             </div>
-            <div>
+            <div style={fieldWrapperStyle}>
               <label style={labelStyle}>CCY</label>
-              <select
-                style={{ ...selectStyle, color: form.CCY ? 'white' : 'var(--color-muted)' }}
-                value={form.CCY}
-                onChange={(e) => handleChange('CCY', e.target.value)}
-                required
-              >
-                <option value="" disabled style={{ color: 'var(--color-muted)' }}>Select currency...</option>
-                {ccyOptions.map((o) => (
-                  <option key={o.value} value={o.value} style={{ color: 'white', background: 'var(--color-surface-2)' }}>{o.label}</option>
-                ))}
-              </select>
+              <ModalSelect value={form.CCY} onChange={(value) => handleChange('CCY', value)} options={ccyOptions} placeholder="Select currency..." required />
             </div>
-            <div>
+            <div style={fieldWrapperStyle}>
               <label style={labelStyle}>Purpose</label>
-              <select
-                style={{ ...selectStyle, color: form.Purpose ? 'white' : 'var(--color-muted)' }}
-                value={form.Purpose}
-                onChange={(e) => handleChange('Purpose', e.target.value)}
-                required
-              >
-                <option value="" disabled style={{ color: 'var(--color-muted)' }}>Select purpose...</option>
-                {purposeOptions.map((o) => (
-                  <option key={o.value} value={o.value} style={{ color: 'white', background: 'var(--color-surface-2)' }}>{o.label}</option>
-                ))}
-              </select>
+              <ModalSelect value={form.Purpose} onChange={(value) => handleChange('Purpose', value)} options={purposeOptions} placeholder="Select purpose..." required />
             </div>
-            <div>
+            <div style={{ ...fieldWrapperStyle, gridColumn: '1 / -1' }}>
               <label style={labelStyle}>Bank Name</label>
-              <select
-                style={{ ...selectStyle, color: form.Bank_Name ? 'white' : 'var(--color-muted)' }}
-                value={form.Bank_Name}
-                onChange={(e) => handleChange('Bank_Name', e.target.value)}
-                required
-              >
-                <option value="" disabled style={{ color: 'var(--color-muted)' }}>Select bank...</option>
-                {bankOptions.map((o) => (
-                  <option key={o.value} value={o.value} style={{ color: 'white', background: 'var(--color-surface-2)' }}>{o.label}</option>
-                ))}
-              </select>
+              <ModalSelect value={form.Bank_Name} onChange={(value) => handleChange('Bank_Name', value)} options={bankOptions} placeholder="Select bank..." required />
             </div>
-            <div>
+            <div style={{ ...fieldWrapperStyle, gridColumn: '1 / -1' }}>
               <label style={labelStyle}>IBAN</label>
               <input style={inputStyle} placeholder="e.g. EG96..." value={form.IBAN} onChange={(e) => handleChange('IBAN', e.target.value)} required />
             </div>
-            <div>
+            <div style={fieldWrapperStyle}>
               <label style={labelStyle}>Amount</label>
               <input type="number" step="0.01" style={inputStyle} placeholder="0.00" value={form.Amount || ''} onChange={(e) => handleChange('Amount', e.target.value)} required />
             </div>
-            <div>
+            <div style={fieldWrapperStyle}>
               <label style={labelStyle}>Date</label>
               <input type="date" style={inputStyle} value={form.date} onChange={(e) => handleChange('date', e.target.value)} required />
             </div>

@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
 import { KpiCard } from '../ui/KpiCard';
 import { DataCard } from '../ui/DataCard';
 import { cn } from '../../utils/cn';
 import { useStore } from '../../store';
 import { legalEntities } from '../../data/legal';
 import { depositAccounts as seededDepositAccounts, type DepositAccount } from '../../data/accounts';
-import { getCanonicalBankKey, matchesAreCode } from '../../selectors/filtering';
+import { getCanonicalBankKey } from '../../selectors/filtering';
+import { ACCOUNTS_FILTERS_UPDATED_EVENT, matchesAccountsFilterCandidate } from '../../selectors/accountsFilters';
 import { fetchFsrAccountDetails, fetchBankAccounts, type DimBankAccount, type FsrAccountDetail } from '../../data/hr';
 import { getAllProjectCurrencyCodes } from '../../utils/projectCurrencies';
 
@@ -14,6 +15,7 @@ const EXTERNAL_ACCOUNT_STORAGE_KEY = 'accounts_external_local';
 const DEPOSIT_ACCOUNT_STORAGE_KEY = 'accounts_deposit_local';
 const BANK_ACCOUNT_STORAGE_KEY = 'accounts_bank_local';
 const BANKING_PARTNER_STORAGE_KEY = 'accounts_partner_local';
+const CHART_COLORS = ['#009999', '#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#06b6d4', '#f97316'];
 
 interface BankingPartnerRow {
   bank: string;
@@ -586,18 +588,55 @@ export function AccountsPanel() {
 
   const enrichedExternalAccounts = useMemo<ExternalAccountRow[]>(() => allExternalAccounts, [allExternalAccounts]);
 
+  const bankAccountScopeLookup = useMemo(() => {
+    const map = new Map<string, { country: string; region: string }>();
+    for (const account of combinedBankAccounts) {
+      const areCode = account.ARE.trim().toUpperCase();
+      if (!map.has(areCode)) {
+        map.set(areCode, { country: account.country, region: account.region });
+      }
+    }
+    return map;
+  }, [combinedBankAccounts]);
+
   const filteredExternalAccounts = useMemo(
     () => enrichedExternalAccounts
-      .filter((item) => item.ARE_Code && matchesAreCode(activeFilters, item.ARE_Code))
+      .filter((item) => {
+        const areCode = item.ARE_Code?.trim().toUpperCase();
+        if (!areCode) return false;
+        const bankScope = bankAccountScopeLookup.get(areCode);
+        const entity = entityLookup.get(areCode);
+        return matchesAccountsFilterCandidate(activeFilters, {
+          areCode,
+          bank: item.Bank_Name,
+          country: bankScope?.country ?? entity?.country,
+          region: bankScope?.region ?? entity?.region,
+        });
+      })
       .sort((a, b) => (a.Bank_Name ?? '').localeCompare(b.Bank_Name ?? '')),
-    [enrichedExternalAccounts, activeFilters],
+    [enrichedExternalAccounts, activeFilters, bankAccountScopeLookup, entityLookup],
   );
 
   const filteredBankAccounts = useMemo(
     () => combinedBankAccounts
-      .filter((item) => item.ARE && matchesAreCode(activeFilters, item.ARE))
+      .filter((item) => matchesAccountsFilterCandidate(activeFilters, {
+        areCode: item.ARE,
+        bank: item.bank,
+        country: item.country,
+        region: item.region,
+      }))
       .sort((a, b) => a.bank.localeCompare(b.bank)),
     [combinedBankAccounts, activeFilters],
+  );
+
+  const filteredSeedBankAccounts = useMemo(
+    () => bankData.filter((item) => matchesAccountsFilterCandidate(activeFilters, {
+      areCode: item.ARE,
+      bank: item.bank,
+      country: item.country,
+      region: item.region,
+    })),
+    [bankData, activeFilters],
   );
 
   const [bankPage, setBankPage] = useState(1);
@@ -639,35 +678,49 @@ export function AccountsPanel() {
   const pagedBankingPartners = bankingPartners.slice((partnerPage - 1) * PARTNER_PAGE_SIZE, partnerPage * PARTNER_PAGE_SIZE);
 
   const kpis = useMemo(() => {
-    const totalBalanceEur = filteredExternalAccounts.reduce((sum, item) => sum + item.Closing_Balance_EUR, 0);
+    const uniqueBanks = new Set(filteredSeedBankAccounts.map((item) => item.bank.trim()).filter(Boolean));
+    const uniqueCurrencies = new Set(filteredSeedBankAccounts.map((item) => item.CCY.trim()).filter(Boolean));
+    const uniqueAres = new Set(filteredSeedBankAccounts.map((item) => item.ARE.trim()).filter(Boolean));
     return [
-      { label: 'Total Accounts', value: String(filteredExternalAccounts.length), valueColor: 'white' as const, subtitle: 'External bank accounts in scope', gradient: 'default' as const },
-      { label: 'Banking Partners', value: String(bankingPartners.length), valueColor: 'white' as const, subtitle: 'Distinct banking relationships', gradient: 'default' as const },
-      { label: 'Currencies', value: String(new Set(filteredExternalAccounts.map((item) => item.CCY)).size), valueColor: 'white' as const, subtitle: 'Active currencies in scope', gradient: 'green' as const },
-      { label: 'Total Ext. Balance', value: formatEur(totalBalanceEur), valueColor: totalBalanceEur > 0 ? 'green' as const : 'white' as const, subtitle: 'Sum of filtered external balances', gradient: 'green' as const },
+      { label: 'Total Accounts', value: String(filteredSeedBankAccounts.length), valueColor: 'white' as const, subtitle: 'Bank accounts from bank_account.json', gradient: 'default' as const },
+      { label: 'Banking Partners', value: String(uniqueBanks.size), valueColor: 'white' as const, subtitle: 'Distinct banks in bank_account.json', gradient: 'default' as const },
+      { label: 'Currencies', value: String(uniqueCurrencies.size), valueColor: 'white' as const, subtitle: 'Currencies present in bank_account.json', gradient: 'green' as const },
+      { label: 'AREs Covered', value: String(uniqueAres.size), valueColor: 'white' as const, subtitle: 'Entities with bank accounts in scope', gradient: 'green' as const },
     ];
-  }, [filteredExternalAccounts, bankingPartners]);
+  }, [filteredSeedBankAccounts]);
 
-  const balanceByBankChartData = useMemo(() => {
+  const accountCountByAreChartData = useMemo(() => {
+    const map = new Map<string, { name: string; value: number }>();
+    for (const item of filteredBankAccounts) {
+      const areCode = item.ARE?.trim() || 'UNKNOWN';
+      const entityName = item.are_name?.trim() || entityLookup.get(areCode)?.name || 'Unknown entity';
+      const existing = map.get(areCode);
+      if (existing) {
+        existing.value += 1;
+      } else {
+        map.set(areCode, { name: `${areCode} - ${entityName}`, value: 1 });
+      }
+    }
+    return [...map.values()].sort((a, b) => b.value - a.value || a.name.localeCompare(b.name));
+  }, [filteredBankAccounts, entityLookup]);
+
+  const accountCountByBankChartData = useMemo(() => {
     const map = new Map<string, number>();
-    for (const item of filteredExternalAccounts) {
-      const bank = item.Bank_Name ?? 'Unknown';
-      map.set(bank, (map.get(bank) ?? 0) + item.Closing_Balance_EUR);
+    for (const item of filteredBankAccounts) {
+      const bank = item.bank?.trim() || 'Unknown bank';
+      map.set(bank, (map.get(bank) ?? 0) + 1);
     }
     return [...map.entries()]
-      .map(([name, value]) => ({ name, value: Math.round(value) }))
-      .sort((a, b) => b.value - a.value);
-  }, [filteredExternalAccounts]);
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name));
+  }, [filteredBankAccounts]);
 
-  const balanceByCcyChartData = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const item of filteredExternalAccounts) {
-      map.set(item.CCY, (map.get(item.CCY) ?? 0) + item.Closing_Balance_EUR);
-    }
-    return [...map.entries()]
-      .map(([name, value]) => ({ name, value: Math.round(value) }))
-      .sort((a, b) => b.value - a.value);
-  }, [filteredExternalAccounts]);
+  const accountCountByBankPieData = useMemo(() => {
+    if (accountCountByBankChartData.length <= 8) return accountCountByBankChartData;
+    const topBanks = accountCountByBankChartData.slice(0, 7);
+    const otherCount = accountCountByBankChartData.slice(7).reduce((sum, item) => sum + item.value, 0);
+    return [...topBanks, { name: 'Other Partners', value: otherCount }];
+  }, [accountCountByBankChartData]);
 
   const handleAddExternalAccount = useCallback((item: ExternalAccountRow) => {
     const updatedExternal = [...getLocalItems<ExternalAccountRow>(EXTERNAL_ACCOUNT_STORAGE_KEY), item];
@@ -694,6 +747,7 @@ export function AccountsPanel() {
       ];
       saveLocalItems(BANK_ACCOUNT_STORAGE_KEY, updatedBankAccounts);
       setLocalBankAccounts(updatedBankAccounts);
+      window.dispatchEvent(new Event(ACCOUNTS_FILTERS_UPDATED_EVENT));
     }
 
     const bankName = item.Bank_Name?.trim();
@@ -761,47 +815,66 @@ export function AccountsPanel() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
-        <DataCard title="Balance by Currency" subtitle="Total EUR equivalent grouped by currency">
-          <div style={{ width: '100%', height: 300, padding: '8px' }}>
-            {balanceByCcyChartData.length > 0 ? (
+        <DataCard title="Bank Accounts by ARE" subtitle="Number of bank accounts per ARE">
+          <div style={{ width: '100%', height: 300, padding: '8px 8px 8px 0' }}>
+            {accountCountByAreChartData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={balanceByCcyChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} stroke="none">
-                    {balanceByCcyChartData.map((_, i) => (
-                      <Cell key={i} fill={['#009999', '#8a00e5', '#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#06b6d4', '#a78bfa'][i % 8]} />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border-2)', borderRadius: 8, fontFamily: 'var(--font-mono)', fontSize: 11 }} itemStyle={{ color: 'white' }} formatter={(value) => formatEur(Number(value))} />
-                </PieChart>
+                <BarChart data={accountCountByAreChartData} layout="vertical" margin={{ left: 10, right: 20, top: 5, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border-2)" horizontal={false} />
+                  <XAxis type="number" allowDecimals={false} tick={{ fill: 'var(--color-muted)', fontFamily: 'var(--font-mono)', fontSize: 10 }} />
+                  <YAxis type="category" dataKey="name" width={160} tick={{ fill: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)', fontSize: 10 }} />
+                  <Tooltip
+                    contentStyle={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border-2)', borderRadius: 8, fontFamily: 'var(--font-mono)', fontSize: 11 }}
+                    itemStyle={{ color: 'white' }}
+                    formatter={(value) => [`${Number(value)} accounts`, 'Accounts']}
+                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                  />
+                  <Bar dataKey="value" radius={[0, 4, 4, 0]} fill="#009999" />
+                </BarChart>
               </ResponsiveContainer>
             ) : (
               <div className="flex items-center justify-center h-full font-mono text-[11px] text-muted">No data available</div>
             )}
-            {balanceByCcyChartData.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-1 px-2">
-                {balanceByCcyChartData.map((entry, i) => (
-                  <div key={entry.name} className="flex items-center gap-1.5">
-                    <span className="inline-block w-2 h-2 rounded-full" style={{ background: ['#009999', '#8a00e5', '#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#06b6d4', '#a78bfa'][i % 8] }} />
-                    <span className="font-mono text-[9px] text-muted">{entry.name}</span>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </DataCard>
 
-        <DataCard title="Balance by Bank" subtitle="Total EUR equivalent grouped by banking partner">
-          <div style={{ width: '100%', height: 300, padding: '8px 8px 8px 0' }}>
-            {balanceByBankChartData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={balanceByBankChartData} layout="vertical" margin={{ left: 10, right: 20, top: 5, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border-2)" horizontal={false} />
-                  <XAxis type="number" tick={{ fill: 'var(--color-muted)', fontFamily: 'var(--font-mono)', fontSize: 10 }} tickFormatter={(v: number) => formatEur(v)} />
-                  <YAxis type="category" dataKey="name" width={120} tick={{ fill: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)', fontSize: 10 }} />
-                  <Tooltip contentStyle={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border-2)', borderRadius: 8, fontFamily: 'var(--font-mono)', fontSize: 11 }} itemStyle={{ color: 'white' }} formatter={(value) => formatEur(Number(value))} cursor={{ fill: 'rgba(255,255,255,0.05)' }} />
-                  <Bar dataKey="value" radius={[0, 4, 4, 0]} fill="#009999" />
-                </BarChart>
-              </ResponsiveContainer>
+        <DataCard title="Bank Accounts by Partner" subtitle="Number of bank accounts per banking partner">
+          <div style={{ width: '100%', height: 300, padding: '8px' }}>
+            {accountCountByBankPieData.length > 0 ? (
+              <>
+                <ResponsiveContainer width="100%" height="82%">
+                  <PieChart>
+                    <Pie
+                      data={accountCountByBankPieData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={58}
+                      outerRadius={98}
+                      paddingAngle={2}
+                      stroke="none"
+                    >
+                      {accountCountByBankPieData.map((entry, index) => (
+                        <Cell key={entry.name} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border-2)', borderRadius: 8, fontFamily: 'var(--font-mono)', fontSize: 11 }}
+                      itemStyle={{ color: 'white' }}
+                      formatter={(value) => [`${Number(value)} accounts`, 'Accounts']}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-1 px-2">
+                  {accountCountByBankPieData.map((entry, index) => (
+                    <div key={entry.name} className="flex items-center gap-1.5">
+                      <span className="inline-block w-2 h-2 rounded-full" style={{ background: CHART_COLORS[index % CHART_COLORS.length] }} />
+                      <span className="font-mono text-[9px] text-muted">{entry.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="flex items-center justify-center h-full font-mono text-[11px] text-muted">No data available</div>
             )}

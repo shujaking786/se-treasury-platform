@@ -9,16 +9,6 @@
                     "Purpose": "Payroll payment",
                     "Bank_Name": "SCB",
                     "IBAN": "0001103078701",
-                    "date": "2026-02-27T00:00:00.000Z",
-                    "Amount": 11292.35
-                },
-                {
-                    "ARE_Code": "463G",
-                    "ARE_Name": "Siemens L.L.C., Oman",
-                    "CCY": "OMR",
-                    "Purpose": "Payroll payment",
-                    "Bank_Name": "SCB",
-                    "IBAN": "0001103078701",
                     "date": "2026-03-05T00:00:00.000Z",
                     "Amount": 11292.35
                 },
@@ -41,6 +31,16 @@
                     "IBAN": "0001103078701",
                     "date": "2026-02-20T00:00:00.000Z",
                     "Amount": 190000
+                },
+                {
+                    "ARE_Code": "463G",
+                    "ARE_Name": "Siemens L.L.C., Oman",
+                    "CCY": "OMR",
+                    "Purpose": "Payroll payment",
+                    "Bank_Name": "SCB",
+                    "IBAN": "0001103078701",
+                    "date": "2026-02-27T00:00:00.000Z",
+                    "Amount": 11292.35
                 },
                 {
                     "ARE_Code": "4659",
@@ -69,26 +69,6 @@
                     "Purpose": "Payroll payment",
                     "Bank_Name": "SCB",
                     "IBAN": "0001208947401",
-                    "date": "2026-03-11T00:00:00.000Z",
-                    "Amount": 600000
-                },
-                {
-                    "ARE_Code": "4678_UAE",
-                    "ARE_Name": "SLLC",
-                    "CCY": "AED",
-                    "Purpose": "Payroll payment",
-                    "Bank_Name": "SCB",
-                    "IBAN": "0001208947401",
-                    "date": "2026-03-05T00:00:00.000Z",
-                    "Amount": 600000
-                },
-                {
-                    "ARE_Code": "4678_UAE",
-                    "ARE_Name": "SLLC",
-                    "CCY": "AED",
-                    "Purpose": "Payroll payment",
-                    "Bank_Name": "SCB",
-                    "IBAN": "0001208947401",
                     "date": "2026-02-20T00:00:00.000Z",
                     "Amount": 40648336
                 },
@@ -103,14 +83,24 @@
                     "Amount": 8529531
                 },
                 {
-                    "ARE_Code": "4732",
-                    "ARE_Name": "Siemens Energy Kuwait for Power Services Company K.S.C.C.",
-                    "CCY": "KWD",
+                    "ARE_Code": "4678_UAE",
+                    "ARE_Name": "SLLC",
+                    "CCY": "AED",
                     "Purpose": "Payroll payment",
-                    "Bank_Name": "Citi",
-                    "IBAN": "KW89CITI0000000000000100133016",
+                    "Bank_Name": "SCB",
+                    "IBAN": "0001208947401",
                     "date": "2026-03-05T00:00:00.000Z",
-                    "Amount": 15154.38
+                    "Amount": 600000
+                },
+                {
+                    "ARE_Code": "4678_UAE",
+                    "ARE_Name": "SLLC",
+                    "CCY": "AED",
+                    "Purpose": "Payroll payment",
+                    "Bank_Name": "SCB",
+                    "IBAN": "0001208947401",
+                    "date": "2026-03-11T00:00:00.000Z",
+                    "Amount": 600000
                 },
                 {
                     "ARE_Code": "4732",
@@ -130,6 +120,16 @@
                     "Bank_Name": "Citi",
                     "IBAN": "KW89CITI0000000000000100133016",
                     "date": "2026-02-27T00:00:00.000Z",
+                    "Amount": 15154.38
+                },
+                {
+                    "ARE_Code": "4732",
+                    "ARE_Name": "Siemens Energy Kuwait for Power Services Company K.S.C.C.",
+                    "CCY": "KWD",
+                    "Purpose": "Payroll payment",
+                    "Bank_Name": "Citi",
+                    "IBAN": "KW89CITI0000000000000100133016",
+                    "date": "2026-03-05T00:00:00.000Z",
                     "Amount": 15154.38
                 },
                 {
@@ -169,8 +169,8 @@
                     "Purpose": "Payroll payment",
                     "Bank_Name": "SCB",
                     "IBAN": "QA84SCBL000000000001471645001",
-                    "date": "2026-02-27T00:00:00.000Z",
-                    "Amount": 261275.13
+                    "date": "2026-02-20T00:00:00.000Z",
+                    "Amount": 6300000
                 },
                 {
                     "ARE_Code": "519X",
@@ -179,8 +179,8 @@
                     "Purpose": "Payroll payment",
                     "Bank_Name": "SCB",
                     "IBAN": "QA84SCBL000000000001471645001",
-                    "date": "2026-02-20T00:00:00.000Z",
-                    "Amount": 6300000
+                    "date": "2026-02-27T00:00:00.000Z",
+                    "Amount": 261275.13
                 },
                 {
                     "ARE_Code": "519X",
@@ -209,8 +209,8 @@
                     "Purpose": "Payroll payment",
                     "Bank_Name": "SCB",
                     "IBAN": "AE260440000001700027601",
-                    "date": "2026-02-27T00:00:00.000Z",
-                    "Amount": 333898.32
+                    "date": "2026-02-20T00:00:00.000Z",
+                    "Amount": 685382.2812
                 },
                 {
                     "ARE_Code": "523S",
@@ -219,8 +219,8 @@
                     "Purpose": "Payroll payment",
                     "Bank_Name": "SCB",
                     "IBAN": "AE260440000001700027601",
-                    "date": "2026-02-20T00:00:00.000Z",
-                    "Amount": 685382.2812
+                    "date": "2026-02-27T00:00:00.000Z",
+                    "Amount": 333898.32
                 }
             ]
         }
