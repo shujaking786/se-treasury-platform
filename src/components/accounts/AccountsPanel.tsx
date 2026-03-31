@@ -51,16 +51,6 @@ function formatEur(value: number): string {
   return `${sign}\u20AC${abs.toFixed(0)}`;
 }
 
-function formatLocal(value: number, ccy: string): string {
-  if (value === 0) return '0';
-  const abs = Math.abs(value);
-  const sign = value < 0 ? '-' : '';
-  if (abs >= 1_000_000_000) return `${sign}${(abs / 1_000_000_000).toFixed(1)}B ${ccy}`;
-  if (abs >= 1_000_000) return `${sign}${(abs / 1_000_000).toFixed(2)}M ${ccy}`;
-  if (abs >= 1_000) return `${sign}${(abs / 1_000).toFixed(0)}K ${ccy}`;
-  return `${sign}${abs.toFixed(0)} ${ccy}`;
-}
-
 function renderEmptyTableRow(colSpan: number) {
   return (
     <tr>
@@ -177,18 +167,6 @@ const cancelBtnStyle: React.CSSProperties = {
 
 const submitBtnStyle: React.CSSProperties = {
   padding: '10px 20px',
-  fontFamily: 'var(--font-mono)',
-  fontSize: 11,
-  letterSpacing: 0.5,
-  color: 'white',
-  background: 'var(--color-accent)',
-  border: 'none',
-  borderRadius: 6,
-  cursor: 'pointer',
-};
-
-const addBtnStyle: React.CSSProperties = {
-  padding: '8px 18px',
   fontFamily: 'var(--font-mono)',
   fontSize: 11,
   letterSpacing: 0.5,
@@ -477,37 +455,56 @@ export function AccountsPanel() {
   }, []);
 
   const allExternalAccounts = useMemo<ExternalAccountRow[]>(() => {
-    // Start with FSR + local entries
-    const rows: ExternalAccountRow[] = [...fsrData, ...localExternalAccounts];
+    const externalFsrAccounts = fsrData.filter((item) => item.Account_Type === 'External');
+    const fsrByAccount = new Map<string, FsrAccountDetail>();
+    const fsrByAreCurrency = new Map<string, FsrAccountDetail[]>();
 
-    // Build a set of existing account keys to avoid duplicates
-    const existingKeys = new Set<string>();
-    for (const item of rows) {
-      const key = normalizeAccountKey(item.Account);
-      if (key) existingKeys.add(key);
+    for (const item of externalFsrAccounts) {
+      const accountKey = normalizeAccountKey(item.Account);
+      if (accountKey && !fsrByAccount.has(accountKey)) {
+        fsrByAccount.set(accountKey, item);
+      }
+
+      if (item.ARE_Code) {
+        const areCurrencyKey = `${item.ARE_Code.toUpperCase()}|${item.CCY.trim().toUpperCase()}`;
+        const matches = fsrByAreCurrency.get(areCurrencyKey) ?? [];
+        matches.push(item);
+        fsrByAreCurrency.set(areCurrencyKey, matches);
+      }
     }
 
-    // Add bank_account.json entries that don't already exist in FSR data
-    for (const dim of bankData) {
-      const key = normalizeAccountKey(dim.account_name);
-      if (key && existingKeys.has(key)) continue;
-      existingKeys.add(key);
-      rows.push({
+    const rows: ExternalAccountRow[] = bankData.map((dim) => {
+      const accountKey = normalizeAccountKey(dim.account_name);
+      const directFsrMatch = fsrByAccount.get(accountKey);
+      const areCurrencyKey = `${dim.ARE.toUpperCase()}|${dim.CCY.trim().toUpperCase()}`;
+      const fallbackFsrMatch = directFsrMatch ?? (fsrByAreCurrency.get(areCurrencyKey) ?? []).find(
+        (item) => getCanonicalBankKey(item.Bank_Name ?? '') === getCanonicalBankKey(dim.bank),
+      );
+
+      return {
         ARE_Code: dim.ARE,
         Entity_Name: dim.are_name,
         Account_Type: 'External',
         Bank_Name: dim.bank,
         Account: dim.account_name,
         CCY: dim.CCY,
-        Closing_Balance: 0,
-        Closing_Balance_EUR: 0,
-        Closing_Balance_Local_CCY: 0,
-        Local_CCY: dim.currency || dim.CCY,
-      });
+        Closing_Balance: fallbackFsrMatch?.Closing_Balance ?? 0,
+        Closing_Balance_EUR: fallbackFsrMatch?.Closing_Balance_EUR ?? 0,
+        Closing_Balance_Local_CCY: fallbackFsrMatch?.Closing_Balance_Local_CCY ?? fallbackFsrMatch?.Closing_Balance ?? 0,
+        Local_CCY: fallbackFsrMatch?.Local_CCY ?? dim.currency ?? dim.CCY,
+      };
+    });
+
+    const existingKeys = new Set(rows.map((item) => normalizeAccountKey(item.Account)).filter(Boolean));
+    for (const item of localExternalAccounts) {
+      const key = normalizeAccountKey(item.Account);
+      if (key && existingKeys.has(key)) continue;
+      if (key) existingKeys.add(key);
+      rows.push(item);
     }
 
     return rows;
-  }, [fsrData, localExternalAccounts, bankData]);
+  }, [fsrData, bankData, localExternalAccounts]);
   const allDepositAccounts = useMemo<DepositAccount[]>(() => [...seededDepositAccounts, ...localDepositAccounts], [localDepositAccounts]);
 
   const entityLookup = useMemo(() => {
@@ -541,47 +538,7 @@ export function AccountsPanel() {
     return uniqueCurrencies.map((ccy) => ({ value: ccy, label: ccy }));
   }, [bankData, allExternalAccounts, allDepositAccounts]);
 
-  const enrichedExternalAccounts = useMemo<ExternalAccountRow[]>(() => {
-    const byAccount = new Map<string, DimBankAccount>();
-    const byBankAndCurrency = new Map<string, DimBankAccount[]>();
-    const byAreCurrency = new Map<string, DimBankAccount[]>();
-
-    for (const item of bankData) {
-      const accountKey = normalizeAccountKey(item.account_name);
-      if (accountKey && !byAccount.has(accountKey)) byAccount.set(accountKey, item);
-      const bankCurrencyKey = `${getCanonicalBankKey(item.bank)}|${item.CCY.trim().toUpperCase()}`;
-      const existing = byBankAndCurrency.get(bankCurrencyKey) ?? [];
-      existing.push(item);
-      byBankAndCurrency.set(bankCurrencyKey, existing);
-      const areCcyKey = `${item.ARE.toUpperCase()}|${item.CCY.trim().toUpperCase()}`;
-      const areCcyList = byAreCurrency.get(areCcyKey) ?? [];
-      areCcyList.push(item);
-      byAreCurrency.set(areCcyKey, areCcyList);
-    }
-
-    return allExternalAccounts.map((item) => {
-      const directMatch = byAccount.get(normalizeAccountKey(item.Account));
-      const bankCurrencyKey = item.Bank_Name ? `${getCanonicalBankKey(item.Bank_Name)}|${item.CCY.trim().toUpperCase()}` : '';
-      const bankCurrencyMatches = bankCurrencyKey ? byBankAndCurrency.get(bankCurrencyKey) ?? [] : [];
-      const fallbackMatch = bankCurrencyMatches.length === 1 ? bankCurrencyMatches[0] : undefined;
-      const matched = directMatch ?? fallbackMatch;
-
-      // If bank name is still missing, try matching by ARE + CCY
-      let bankName = item.Bank_Name ?? matched?.bank ?? null;
-      if (!bankName && item.ARE_Code) {
-        const areCcyKey = `${item.ARE_Code.toUpperCase()}|${item.CCY.trim().toUpperCase()}`;
-        const areCcyMatches = byAreCurrency.get(areCcyKey) ?? [];
-        if (areCcyMatches.length > 0) bankName = areCcyMatches[0].bank;
-      }
-
-      return {
-        ...item,
-        ARE_Code: item.ARE_Code ?? matched?.ARE ?? null,
-        Entity_Name: item.Entity_Name ?? matched?.are_name ?? null,
-        Bank_Name: bankName,
-      };
-    });
-  }, [allExternalAccounts, bankData]);
+  const enrichedExternalAccounts = useMemo<ExternalAccountRow[]>(() => allExternalAccounts, [allExternalAccounts]);
 
   const filteredExternalAccounts = useMemo(
     () => enrichedExternalAccounts
@@ -590,11 +547,18 @@ export function AccountsPanel() {
     [enrichedExternalAccounts, activeFilters],
   );
 
+  const filteredBankAccounts = useMemo(
+    () => bankData
+      .filter((item) => item.ARE && matchesAreCode(activeFilters, item.ARE))
+      .sort((a, b) => a.bank.localeCompare(b.bank)),
+    [bankData, activeFilters],
+  );
+
   const [bankPage, setBankPage] = useState(1);
   const BANK_PAGE_SIZE = 20;
-  useEffect(() => { setBankPage(1); }, [filteredExternalAccounts.length]);
-  const bankTotalPages = Math.max(1, Math.ceil(filteredExternalAccounts.length / BANK_PAGE_SIZE));
-  const pagedBankAccounts = filteredExternalAccounts.slice((bankPage - 1) * BANK_PAGE_SIZE, bankPage * BANK_PAGE_SIZE);
+  useEffect(() => { setBankPage(1); }, [filteredBankAccounts.length]);
+  const bankTotalPages = Math.max(1, Math.ceil(filteredBankAccounts.length / BANK_PAGE_SIZE));
+  const pagedBankAccounts = filteredBankAccounts.slice((bankPage - 1) * BANK_PAGE_SIZE, bankPage * BANK_PAGE_SIZE);
 
 
   const bankingPartners = useMemo(() => {
@@ -614,6 +578,12 @@ export function AccountsPanel() {
     }
     return [...summaryMap.values()].sort((left, right) => right.totalBalanceEur - left.totalBalanceEur);
   }, [filteredExternalAccounts]);
+
+  const [partnerPage, setPartnerPage] = useState(1);
+  const PARTNER_PAGE_SIZE = 10;
+  useEffect(() => { setPartnerPage(1); }, [bankingPartners.length]);
+  const partnerTotalPages = Math.max(1, Math.ceil(bankingPartners.length / PARTNER_PAGE_SIZE));
+  const pagedBankingPartners = bankingPartners.slice((partnerPage - 1) * PARTNER_PAGE_SIZE, partnerPage * PARTNER_PAGE_SIZE);
 
   const kpis = useMemo(() => {
     const totalBalanceEur = filteredExternalAccounts.reduce((sum, item) => sum + item.Closing_Balance_EUR, 0);
@@ -722,34 +692,33 @@ export function AccountsPanel() {
         </DataCard>
       </div>
 
-      <DataCard title="Bank Accounts" subtitle="All accounts grouped by entity - showing local + EUR balance" headerRight={<button type="button" style={addBtnStyle} onClick={() => setShowExternalModal(true)}>Add Account</button>} style={{ marginBottom: 24 }}>
+      <DataCard title="Bank Accounts" subtitle="Accounts from bank_account.json" style={{ marginBottom: 24 }}>
         <div style={{ overflowX: 'auto', padding: '0 8px 8px 8px' }}>
           <table className="w-full border-collapse min-w-[950px]">
             <thead>
               <tr className="bg-surface-2 border-b-2 border-border-2">
-                {['ARE', 'Entity', 'Bank', 'Account', 'CCY', 'Balance (Local)', 'Balance (EUR)', 'Comment'].map((heading, index) => <th key={heading} className={cn(headerClassName, (index === 5 || index === 6) ? 'text-right' : 'text-left')}>{heading}</th>)}
+                {['ARE', 'Entity', 'Bank', 'Account', 'CCY', 'Country', 'Region'].map((heading) => <th key={heading} className={cn(headerClassName, 'text-left')}>{heading}</th>)}
               </tr>
             </thead>
             <tbody>
               {pagedBankAccounts.length > 0 ? pagedBankAccounts.map((account, index) => (
-                <tr key={`${account.ARE_Code ?? 'unknown'}-${account.Account}-${index}`} className={rowClassName}>
-                  <td className={`${cellPadding} font-mono text-[12px] font-bold text-white`}>{account.ARE_Code ?? '-'}</td>
-                  <td className={`${cellPadding} text-[11px] text-muted truncate max-w-[160px]`}>{account.Entity_Name ?? 'Unknown entity'}</td>
-                  <td className={`${cellPadding} text-[11px] text-text-primary`}>{account.Bank_Name ?? '\u2014'}</td>
-                  <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{account.Account}</td>
+                <tr key={`${account.ARE}-${account.account_name}-${index}`} className={rowClassName}>
+                  <td className={`${cellPadding} font-mono text-[12px] font-bold text-white`}>{account.ARE}</td>
+                  <td className={`${cellPadding} text-[11px] text-muted truncate max-w-[180px]`}>{account.are_name}</td>
+                  <td className={`${cellPadding} text-[11px] text-text-primary`}>{account.bank}</td>
+                  <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{account.account_name}</td>
                   <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{account.CCY}</td>
-                  <td className={`${cellPadding} text-right font-mono text-[11px] text-text-primary`}>{formatLocal(account.Closing_Balance, account.CCY)}</td>
-                  <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, account.Closing_Balance_EUR > 0 ? 'text-status-green' : 'text-muted')}>{formatEur(account.Closing_Balance_EUR)}</td>
-                  <td className={`${cellPadding} text-[10px] text-muted`}>{account.Comment ?? '\u2014'}</td>
+                  <td className={`${cellPadding} text-[11px] text-muted`}>{account.country}</td>
+                  <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{account.region}</td>
                 </tr>
-              )) : renderEmptyTableRow(8)}
+              )) : renderEmptyTableRow(7)}
             </tbody>
           </table>
         </div>
         {bankTotalPages > 1 && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
             <span className="font-mono text-[10px] text-muted">
-              Showing {(bankPage - 1) * BANK_PAGE_SIZE + 1}{'\u2013'}{Math.min(bankPage * BANK_PAGE_SIZE, filteredExternalAccounts.length)} of {filteredExternalAccounts.length}
+              Showing {(bankPage - 1) * BANK_PAGE_SIZE + 1}{'\u2013'}{Math.min(bankPage * BANK_PAGE_SIZE, filteredBankAccounts.length)} of {filteredBankAccounts.length}
             </span>
             <div style={{ display: 'flex', gap: 6 }}>
               <button type="button" style={{ padding: '6px 12px', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.5, border: '1px solid var(--color-border-2)', borderRadius: 6, background: 'transparent', color: 'var(--color-muted)', cursor: 'pointer', ...(bankPage === 1 ? { opacity: 0.35, cursor: 'default' } : {}) }} disabled={bankPage === 1} onClick={() => setBankPage((p) => p - 1)}>&laquo; Prev</button>
@@ -771,7 +740,7 @@ export function AccountsPanel() {
               </tr>
             </thead>
             <tbody>
-              {bankingPartners.length > 0 ? bankingPartners.map((partner) => (
+              {pagedBankingPartners.length > 0 ? pagedBankingPartners.map((partner) => (
                 <tr key={partner.bank} className={rowClassName}>
                   <td className={`${cellPadding} text-[12px] font-semibold text-white`}>{partner.bank}</td>
                   <td className={`${cellPadding} font-mono text-[12px] text-text-primary`}>{partner.accountCount}</td>
@@ -783,6 +752,20 @@ export function AccountsPanel() {
             </tbody>
           </table>
         </div>
+        {partnerTotalPages > 1 && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
+            <span className="font-mono text-[10px] text-muted">
+              Showing {(partnerPage - 1) * PARTNER_PAGE_SIZE + 1}{'\u2013'}{Math.min(partnerPage * PARTNER_PAGE_SIZE, bankingPartners.length)} of {bankingPartners.length}
+            </span>
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button type="button" style={{ padding: '6px 12px', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.5, border: '1px solid var(--color-border-2)', borderRadius: 6, background: 'transparent', color: 'var(--color-muted)', cursor: 'pointer', ...(partnerPage === 1 ? { opacity: 0.35, cursor: 'default' } : {}) }} disabled={partnerPage === 1} onClick={() => setPartnerPage((p) => p - 1)}>&laquo; Prev</button>
+              {Array.from({ length: partnerTotalPages }, (_, i) => i + 1).map((p) => (
+                <button key={p} type="button" style={{ padding: '6px 12px', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.5, border: '1px solid var(--color-border-2)', borderRadius: 6, cursor: 'pointer', ...(p === partnerPage ? { background: 'var(--color-accent)', borderColor: 'var(--color-accent)', color: 'white' } : { background: 'transparent', color: 'var(--color-muted)' }) }} onClick={() => setPartnerPage(p)}>{p}</button>
+              ))}
+              <button type="button" style={{ padding: '6px 12px', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.5, border: '1px solid var(--color-border-2)', borderRadius: 6, background: 'transparent', color: 'var(--color-muted)', cursor: 'pointer', ...(partnerPage === partnerTotalPages ? { opacity: 0.35, cursor: 'default' } : {}) }} disabled={partnerPage === partnerTotalPages} onClick={() => setPartnerPage((p) => p + 1)}>Next &raquo;</button>
+            </div>
+          </div>
+        )}
       </DataCard>
 
       {/* Deposit Accounts table hidden */}
