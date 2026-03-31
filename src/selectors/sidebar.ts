@@ -44,7 +44,7 @@ function isInScope(areCodes: string[], scope: Set<string> | null): boolean {
     return true;
   }
 
-  return areCodes.some((areCode) => scope.has(areCode));
+  return areCodes.some((areCode) => scope.has(areCode.toUpperCase()));
 }
 
 function countInScope(areCodes: string[], scope: Set<string> | null): number {
@@ -52,7 +52,7 @@ function countInScope(areCodes: string[], scope: Set<string> | null): number {
     return areCodes.length;
   }
 
-  return areCodes.filter((areCode) => scope.has(areCode)).length;
+  return areCodes.filter((areCode) => scope.has(areCode.toUpperCase())).length;
 }
 
 function buildCountrySections(filters: DashboardFilters): SidebarSection[] {
@@ -93,29 +93,35 @@ function buildAreSections(filters: DashboardFilters): SidebarSection[] {
   const scope = getMatchingAreCodes(filters, { excludeKinds: ['entity'] });
   const meEntities = legalEntities
     .filter((entity) => entity.region === 'ME' && isInScope([entity.areCode], scope))
-    .map((entity) => ({
-      key: `entity-${entity.areCode}`,
-      label: `${entity.areCode} ${entity.country}`,
-      meta: entity.countryCode,
-      filter: {
-        kind: 'entity' as const,
-        areCode: entity.areCode,
-        label: `${entity.areCode} ${entity.country}`,
-      },
-    }));
+    .map((entity) => {
+      const code = entity.areCode.toUpperCase();
+      return {
+        key: `entity-${code}`,
+        label: `${code} ${entity.country}`,
+        meta: entity.countryCode,
+        filter: {
+          kind: 'entity' as const,
+          areCode: code,
+          label: `${code} ${entity.country}`,
+        },
+      };
+    });
 
   const africaEntities = legalEntities
     .filter((entity) => entity.region === 'AFRICA' && isInScope([entity.areCode], scope))
-    .map((entity) => ({
-      key: `entity-${entity.areCode}`,
-      label: `${entity.areCode} ${entity.country}`,
-      meta: entity.countryCode,
-      filter: {
-        kind: 'entity' as const,
-        areCode: entity.areCode,
-        label: `${entity.areCode} ${entity.country}`,
-      },
-    }));
+    .map((entity) => {
+      const code = entity.areCode.toUpperCase();
+      return {
+        key: `entity-${code}`,
+        label: `${code} ${entity.country}`,
+        meta: entity.countryCode,
+        filter: {
+          kind: 'entity' as const,
+          areCode: code,
+          label: `${code} ${entity.country}`,
+        },
+      };
+    });
 
   return [
     { title: 'ME AREs', items: meEntities },
@@ -184,7 +190,7 @@ export function isSidebarItemActive(filters: DashboardFilters, itemFilter: Dashb
       case 'country':
         return filter.kind === 'country' && filter.countryCode === itemFilter.countryCode;
       case 'entity':
-        return filter.kind === 'entity' && filter.areCode === itemFilter.areCode;
+        return filter.kind === 'entity' && filter.areCode.toUpperCase() === itemFilter.areCode.toUpperCase();
       case 'bankingPartner':
         return filter.kind === 'bankingPartner' && filter.bank === itemFilter.bank;
     }

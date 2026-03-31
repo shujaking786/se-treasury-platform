@@ -9,13 +9,13 @@ export function ForecastPanel() {
     <div>
       {/* Payroll Schedule */}
       <SectionHeader
-        title="HR Payroll Schedule &mdash; Feb/Mar 2026"
-        rightContent={<span className="font-mono text-[9px] text-muted">SOURCE: HR MONTHLY UPLOAD &middot; 9 ENTITIES</span>}
+        title="HR Payroll Schedule — Feb/Mar 2026"
+        rightContent={<span className="font-mono text-[9px] text-muted">SOURCE: HR MONTHLY UPLOAD · 9 ENTITIES</span>}
         style={{ marginTop: 0 }}
       />
       <DataCard
-        title="External Account Funding Request &mdash; Payroll"
-        subtitle="Treasury &amp; Corporate Finance &middot; ME Region &middot; EUR Equiv."
+        title="External Account Funding Request — Payroll"
+        subtitle="Treasury & Corporate Finance · ME Region · EUR Equiv."
         headerRight={<Pill variant="blue">MONTHLY UPLOAD</Pill>}
         style={{ marginBottom: 24, overflowX: 'auto' }}
       >
@@ -70,18 +70,18 @@ export function ForecastPanel() {
 
       {/* Vendor Run */}
       <SectionHeader
-        title="Accounting Vendor Run &mdash; Week 01 Mar 2026"
+        title="Accounting Vendor Run — Week 01 Mar 2026"
         rightContent={<span className="font-mono text-[9px] text-muted">SOURCE: ACCOUNTING WEEKLY UPLOAD</span>}
       />
       <DataCard
-        title="Weekly Vendor Funding &mdash; Requested vs. Utilized vs. Estimate"
-        subtitle="Mon request &rarr; Wed execution window &middot; Variances auto-flagged"
+        title="Weekly Vendor Funding — Requested vs. Utilized vs. Estimate"
+        subtitle="Mon request → Wed execution window · Variances auto-flagged"
         headerRight={<Pill variant="blue">WEEKLY UPLOAD</Pill>}
         style={{ overflowX: 'auto' }}
         footer={
           <>
-            <span className="font-mono text-[10px] text-status-red">&lrm;&#9888; 463G OMR: 7K OMR pending approval &mdash; exceeds weekly estimate</span>
-            <span className="font-mono text-[10px] text-muted">Buffer reserves: 4678 +1.5M &middot; 4659 +1.0M &middot; 519X +1.0M</span>
+            <span className="font-mono text-[10px] text-status-red">&lrm;&#9888; 463G OMR: 7K OMR pending approval — exceeds weekly estimate</span>
+            <span className="font-mono text-[10px] text-muted">Buffer reserves: 4678 +1.5M · 4659 +1.0M · 519X +1.0M</span>
           </>
         }
       >
@@ -114,7 +114,7 @@ export function ForecastPanel() {
                       {row.varianceLabel}
                     </span>
                   ) : (
-                    <span className="text-muted">&mdash;</span>
+                    <span className="text-muted">—</span>
                   )}
                 </td>
                 <td className="px-3.5 py-[9px]">

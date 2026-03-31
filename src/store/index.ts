@@ -47,7 +47,7 @@ export const useStore = create<AppState>()(
   persist(
     (set) => ({
       // Branding
-      brandMode: 'default',
+      brandMode: 'siemens-energy',
       toggleBrandMode: () =>
         set((state) => ({
           brandMode: state.brandMode === 'default' ? 'siemens-energy' : 'default',

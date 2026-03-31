@@ -94,7 +94,7 @@ export function PositionsPanel() {
       {/* ME Region Header + Currency Toggle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
         <span className="font-mono text-[11px] font-bold tracking-[1px] uppercase text-muted">
-          ME Region &mdash; All AREs
+          ME Region — All AREs
         </span>
         <div className="flex gap-2 items-center">
           <span className="font-mono text-[9px] text-muted">DISPLAY CCY:</span>
@@ -137,7 +137,7 @@ export function PositionsPanel() {
       </DataCard>
 
       {/* Africa Region */}
-      <SectionHeader title="Africa Region &mdash; All AREs" />
+      <SectionHeader title="Africa Region — All AREs" />
       <DataCard style={{ overflowX: 'auto' }}>
         <table className="w-full border-collapse min-w-[900px]">
           <thead>
@@ -159,10 +159,10 @@ export function PositionsPanel() {
             <tr style={{ backgroundColor: 'var(--color-surface-2)' }}>
               <td colSpan={2} className="px-3.5 py-[9px] font-mono text-[10px] text-muted">AFRICA TOTAL</td>
               <td className="px-3.5 py-[9px] text-right font-mono font-bold text-white">156.6M</td>
-              <td className="px-3.5 py-[9px] text-right font-mono font-bold text-muted">&mdash;</td>
-              <td className="px-3.5 py-[9px] text-right font-mono font-bold text-muted">&mdash;</td>
+              <td className="px-3.5 py-[9px] text-right font-mono font-bold text-muted">—</td>
+              <td className="px-3.5 py-[9px] text-right font-mono font-bold text-muted">—</td>
               <td className="px-3.5 py-[9px] text-right font-mono font-bold text-white">156.6M</td>
-              <td className="px-3.5 py-[9px] text-right font-mono font-bold text-muted">&mdash;</td>
+              <td className="px-3.5 py-[9px] text-right font-mono font-bold text-muted">—</td>
               <td className="px-3.5 py-[9px] text-right font-mono font-bold text-status-green">&euro;0</td>
               <td className="px-3.5 py-[9px] text-right font-mono font-bold text-status-green">156.6M</td>
               <td></td>

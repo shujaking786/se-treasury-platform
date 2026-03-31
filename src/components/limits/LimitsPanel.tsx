@@ -51,8 +51,8 @@ export function LimitsPanel() {
       <DataCard
         footer={
           <>
-            <span className="font-mono text-[10px] text-muted">LoS (Global Letters of Support) module: Phase 2 &middot; Requires LoS limits + utilization upload</span>
-            <span className="font-mono text-[10px] text-muted">Loans &amp; Deposits: Phase 2 &middot; Upload on maturity event</span>
+            <span className="font-mono text-[10px] text-muted">LoS (Global Letters of Support) module: Phase 2 · Requires LoS limits + utilization upload</span>
+            <span className="font-mono text-[10px] text-muted">Loans & Deposits: Phase 2 · Upload on maturity event</span>
           </>
         }
         style={{ overflowX: 'auto' }}

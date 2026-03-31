@@ -42,21 +42,21 @@ export function getCanonicalBankKey(bankName: string): string {
 }
 
 export function extractAreCode(value: string): string {
-  const match = value.trim().match(/^[A-Z0-9]+/);
-  return match ? match[0] : value.trim();
+  const match = value.trim().match(/^[A-Za-z0-9]+/);
+  return match ? match[0].toUpperCase() : value.trim().toUpperCase();
 }
 
 /** Get matching ARE codes for a single filter value. */
 function getMatchingAreCodesForSingle(filter: DashboardFilterValue): Set<string> {
   if (filter.kind === 'entity') {
-    return new Set([filter.areCode]);
+    return new Set([filter.areCode.toUpperCase()]);
   }
 
   if (filter.kind === 'region') {
     return new Set(
       legalEntities
         .filter((entity) => entity.region === filter.region)
-        .map((entity) => entity.areCode),
+        .map((entity) => entity.areCode.toUpperCase()),
     );
   }
 
@@ -64,10 +64,10 @@ function getMatchingAreCodesForSingle(filter: DashboardFilterValue): Set<string>
     const countryEntry = countryPresence.find((entry) => entry.countryCode === filter.countryCode);
     return new Set(
       countryEntry
-        ? countryEntry.areCodes
+        ? countryEntry.areCodes.map((code) => code.toUpperCase())
         : legalEntities
             .filter((entity) => entity.countryCode === filter.countryCode)
-            .map((entity) => entity.areCode),
+            .map((entity) => entity.areCode.toUpperCase()),
     );
   }
 
@@ -75,7 +75,7 @@ function getMatchingAreCodesForSingle(filter: DashboardFilterValue): Set<string>
   return new Set(
     bankAccounts
       .filter((account) => getCanonicalBankKey(account.bank) === getCanonicalBankKey(filter.bank))
-      .map((account) => account.areCode),
+      .map((account) => account.areCode.toUpperCase()),
   );
 }
 

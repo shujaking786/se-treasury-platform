@@ -1,51 +1,203 @@
-import { useState, useEffect } from 'react';
 import { AlertBanner } from '../ui/AlertBanner';
 import { KpiCard } from '../ui/KpiCard';
 import { DataCard } from '../ui/DataCard';
 import { LimitBar } from '../ui/LimitBar';
+import { Pill } from '../ui/Pill';
 import { SectionHeader } from '../ui/SectionHeader';
 import { cn } from '../../utils/cn';
 import { useStore } from '../../store';
+import { mePositionRows, africaPositionRows } from '../../data';
 import { selectOverviewViewModel } from '../../selectors/overview';
 import { matchesAreCode } from '../../selectors/filtering';
-import {
-  fetchFsrAccountDetails,
-  fetchFsrLiquiditySummary,
-  type FsrAccountDetail,
-  type FsrLiquiditySummary,
-} from '../../data/hr';
+import type { PositionRow, StatusVariant } from '../../types';
 
 function formatBreakdownValue(value: number): string {
   return value === 0 ? '\u20AC0' : `\u20AC${(value / 1_000_000).toFixed(1)}M`;
 }
 
-function formatAccountBalance(value: number): string {
-  if (value === 0) return '\u20AC0';
+function formatPositionMillions(value: number | null): string {
+  if (value === null) {
+    return '\u2014';
+  }
+
+  if (value === 0) {
+    return '\u20AC0';
+  }
+
   const abs = Math.abs(value);
   const sign = value < 0 ? '-' : '';
-  if (abs >= 1_000_000) return `${sign}\u20AC${(abs / 1_000_000).toFixed(2)}M`;
-  if (abs >= 1_000) return `${sign}\u20AC${(abs / 1_000).toFixed(0)}K`;
-  return `${sign}\u20AC${abs.toFixed(0)}`;
+  return `${sign}\u20AC${abs.toFixed(abs >= 10 ? 1 : 2)}M`;
+}
+
+function formatTransitValue(value: number | null, direction: PositionRow['fundsInTransitDirection']): string {
+  if (value === null) {
+    return '\u2014';
+  }
+
+  const prefix = direction === 'out' ? '-' : '+';
+  return `${prefix}${formatPositionMillions(value)}`;
+}
+
+function getStatusMeta(status: PositionRow['status']): { label: string; variant: StatusVariant } {
+  switch (status) {
+    case 'NEGATIVE':
+      return { label: 'NEGATIVE', variant: 'red' };
+    case 'LARGE':
+      return { label: 'LARGE', variant: 'blue' };
+    case 'MTO':
+      return { label: 'MTO', variant: 'mto' };
+    case 'MONITORED':
+      return { label: 'MONITORED', variant: 'amber' };
+    case 'INT_DEBT':
+      return { label: 'INT DEBT', variant: 'amber' };
+    case 'MULTI_CTRY':
+      return { label: 'MULTI-CTRY', variant: 'blue' };
+    case 'IN_LIQ':
+      return { label: 'IN LIQ.', variant: 'amber' };
+    default:
+      return { label: 'HEALTHY', variant: 'green' };
+  }
+}
+
+function RegionSummaryTable({
+  title,
+  subtitle,
+  rows,
+  totalLabel,
+}: {
+  title: string;
+  subtitle: string;
+  rows: PositionRow[];
+  totalLabel: string;
+}) {
+  const headerClassName = 'px-5 py-3.5 font-mono text-[10px] font-semibold tracking-[1.5px] uppercase text-muted whitespace-nowrap';
+  const rowClassName = 'border-b border-border-custom last:border-b-0 transition-colors hover:bg-[var(--color-accent-hover)]';
+  const cellPadding = 'px-5 py-4';
+
+  const totals = rows.reduce(
+    (sum, row) => ({
+      extLiquidity: sum.extLiquidity + row.extLiquidity,
+      fundsInTransit:
+        sum.fundsInTransit + (row.fundsInTransit ?? 0) * (row.fundsInTransitDirection === 'out' ? -1 : 1),
+      reserved: sum.reserved + (row.reserved ?? 0),
+      expectedExtLiquidity: sum.expectedExtLiquidity + row.expectedExtLiquidity,
+      intLiquidity: sum.intLiquidity + (row.intLiquidity ?? 0),
+      intDebt: sum.intDebt + row.intDebt,
+      totalNetPosition: sum.totalNetPosition + row.totalNetPosition,
+    }),
+    {
+      extLiquidity: 0,
+      fundsInTransit: 0,
+      reserved: 0,
+      expectedExtLiquidity: 0,
+      intLiquidity: 0,
+      intDebt: 0,
+      totalNetPosition: 0,
+    },
+  );
+
+  return (
+    <>
+      <SectionHeader title={title} />
+      <DataCard subtitle={subtitle} style={{ marginBottom: 24 }}>
+        <div style={{ overflowX: 'auto', padding: '4px 8px 8px 8px' }}>
+          <table className="w-full border-collapse min-w-[1150px]">
+            <thead>
+              <tr className="bg-surface-2 border-b-2 border-border-2">
+                {['ARE', 'Country', 'Ext. Liquidity', 'Funds in Transit', 'Reserved', 'Expected Ext. Liq.', 'Int. Liquidity', 'Int. Debt', 'Total Net Position', 'Status'].map((heading, index) => (
+                  <th key={heading} className={cn(headerClassName, index >= 2 && index <= 8 ? 'text-right' : 'text-left')}>
+                    {heading}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.length > 0 ? (
+                <>
+                  {rows.map((row) => {
+                    const status = getStatusMeta(row.status);
+                    return (
+                      <tr key={`${title}-${row.areCode}`} className={cn(rowClassName, row.isNegative && 'bg-[var(--color-status-red-bg)]/30')}>
+                        <td className={cn(`${cellPadding} font-mono text-[12px] font-bold`, row.isNegative ? 'text-status-red' : 'text-white')}>
+                          {row.areCode}
+                        </td>
+                        <td className={`${cellPadding} text-[11px] text-text-primary`}>{row.country}</td>
+                        <td className={`${cellPadding} text-right font-mono text-[12px] text-white`}>{formatPositionMillions(row.extLiquidity)}</td>
+                        <td
+                          className={cn(
+                            `${cellPadding} text-right font-mono text-[12px]`,
+                            row.fundsInTransitDirection === 'in'
+                              ? 'text-status-amber'
+                              : row.fundsInTransitDirection === 'out'
+                                ? 'text-status-red'
+                                : 'text-muted',
+                          )}
+                        >
+                          {formatTransitValue(row.fundsInTransit, row.fundsInTransitDirection)}
+                        </td>
+                        <td className={`${cellPadding} text-right font-mono text-[12px] ${row.reserved ? 'text-status-amber' : 'text-muted'}`}>
+                          {formatPositionMillions(row.reserved)}
+                        </td>
+                        <td className={`${cellPadding} text-right font-mono text-[12px] text-white`}>{formatPositionMillions(row.expectedExtLiquidity)}</td>
+                        <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, row.intLiquidity ? 'text-status-green' : 'text-muted')}>
+                          {formatPositionMillions(row.intLiquidity)}
+                        </td>
+                        <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, row.intDebt > 0 ? 'text-status-red' : 'text-muted')}>
+                          {formatPositionMillions(row.intDebt)}
+                        </td>
+                        <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, row.totalNetPosition < 0 ? 'text-status-red' : 'text-status-green')}>
+                          {formatPositionMillions(row.totalNetPosition)}
+                        </td>
+                        <td className={cellPadding}>
+                          <Pill variant={status.variant}>{status.label}</Pill>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  <tr style={{ background: 'rgba(11, 22, 40, 0.8)' }}>
+                    <td colSpan={2} className={`${cellPadding} font-mono text-[10px] font-semibold tracking-[1.2px] text-muted uppercase`}>
+                      {totalLabel}
+                    </td>
+                    <td className={`${cellPadding} text-right font-mono text-[12px] font-bold text-white`}>{formatPositionMillions(totals.extLiquidity)}</td>
+                    <td className={cn(`${cellPadding} text-right font-mono text-[12px] font-bold`, totals.fundsInTransit > 0 ? 'text-status-amber' : totals.fundsInTransit < 0 ? 'text-status-red' : 'text-muted')}>
+                      {totals.fundsInTransit === 0 ? '\u2014' : formatPositionMillions(totals.fundsInTransit)}
+                    </td>
+                    <td className={`${cellPadding} text-right font-mono text-[12px] font-bold ${totals.reserved > 0 ? 'text-status-amber' : 'text-muted'}`}>
+                      {totals.reserved === 0 ? '\u2014' : formatPositionMillions(totals.reserved)}
+                    </td>
+                    <td className={`${cellPadding} text-right font-mono text-[12px] font-bold text-white`}>{formatPositionMillions(totals.expectedExtLiquidity)}</td>
+                    <td className={`${cellPadding} text-right font-mono text-[12px] font-bold ${totals.intLiquidity > 0 ? 'text-status-green' : 'text-muted'}`}>
+                      {totals.intLiquidity === 0 ? '\u2014' : formatPositionMillions(totals.intLiquidity)}
+                    </td>
+                    <td className={`${cellPadding} text-right font-mono text-[12px] font-bold ${totals.intDebt > 0 ? 'text-status-red' : 'text-muted'}`}>
+                      {formatPositionMillions(totals.intDebt)}
+                    </td>
+                    <td className={`${cellPadding} text-right font-mono text-[12px] font-bold ${totals.totalNetPosition < 0 ? 'text-status-red' : 'text-status-green'}`}>
+                      {formatPositionMillions(totals.totalNetPosition)}
+                    </td>
+                    <td className={cellPadding} />
+                  </tr>
+                </>
+              ) : (
+                <tr>
+                  <td colSpan={10} className="px-5 py-8 text-center font-mono text-[11px] text-muted">
+                    No summary rows for the current filter.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </DataCard>
+    </>
+  );
 }
 
 export function OverviewPanel() {
   const activeFilters = useStore((state) => state.activeFilters);
   const overview = selectOverviewViewModel(activeFilters);
-
-  const [accountDetails, setAccountDetails] = useState<FsrAccountDetail[]>([]);
-  const [liquiditySummary, setLiquiditySummary] = useState<FsrLiquiditySummary[]>([]);
-
-  useEffect(() => {
-    fetchFsrAccountDetails().then(setAccountDetails);
-    fetchFsrLiquiditySummary().then(setLiquiditySummary);
-  }, []);
-
-  const filteredAccounts = accountDetails.filter((a) => matchesAreCode(activeFilters, a.ARE_Code));
-  const filteredLiquidity = liquiditySummary.filter((a) => matchesAreCode(activeFilters, a.ARE_Code));
-
-  const headerClassName = 'px-5 py-3.5 font-mono text-[10px] font-semibold tracking-[1.5px] uppercase text-muted whitespace-nowrap';
-  const rowClassName = 'border-b border-border-custom last:border-b-0 transition-colors hover:bg-[var(--color-accent-hover)]';
-  const cellPadding = 'px-5 py-4';
+  const filteredMeSummary = mePositionRows.filter((row) => matchesAreCode(activeFilters, row.areCode.replace(' \u26A0', '')));
+  const filteredAfricaSummary = africaPositionRows.filter((row) => matchesAreCode(activeFilters, row.areCode));
 
   return (
     <div>
@@ -58,7 +210,7 @@ export function OverviewPanel() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-        <DataCard title="MEA Regional Breakdown" subtitle="Total Net Position by Region &mdash; EUR">
+        <DataCard title="MEA Regional Breakdown" subtitle="Total Net Position by Region — EUR">
           <div style={{ padding: '16px' }}>
             <div style={{ marginBottom: '12px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
@@ -115,7 +267,7 @@ export function OverviewPanel() {
           </div>
         </DataCard>
 
-        <DataCard title="Top Positions by Entity" subtitle="Net Total Liquidity &mdash; EUR">
+        <DataCard title="Top Positions by Entity" subtitle="Net Total Liquidity — EUR">
           <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {overview.topPositions.length > 0 ? (
               overview.topPositions.map((position) => (
@@ -140,87 +292,19 @@ export function OverviewPanel() {
         </DataCard>
       </div>
 
-      <SectionHeader title="External Bank Accounts" />
-      <DataCard subtitle={`${filteredAccounts.length} accounts in scope`} style={{ marginBottom: 24 }}>
-        <div style={{ overflowX: 'auto', padding: '4px 8px 8px 8px' }}>
-          <table className="w-full border-collapse min-w-[800px]">
-            <thead>
-              <tr className="bg-surface-2 border-b-2 border-border-2">
-                {['ARE', 'Entity', 'Bank', 'Account', 'CCY', 'Balance (Local)', 'Balance (EUR)'].map((h, i) => (
-                  <th key={h} className={cn(headerClassName, i >= 5 ? 'text-right' : 'text-left')}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredAccounts.length > 0 ? filteredAccounts.map((a, i) => (
-                <tr key={`${a.ARE_Code}-${a.Account}-${i}`} className={rowClassName}>
-                  <td className={`${cellPadding} font-mono text-[12px] font-bold text-white`}>{a.ARE_Code}</td>
-                  <td className={`${cellPadding} text-[11px] text-text-primary`}>{a.Entity_Name}</td>
-                  <td className={`${cellPadding} text-[11px] text-text-primary`}>{a.Bank_Name}</td>
-                  <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{a.Account}</td>
-                  <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{a.CCY}</td>
-                  <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, (a.Closing_Balance_Local_CCY ?? 0) > 0 ? 'text-status-green' : (a.Closing_Balance_Local_CCY ?? 0) < 0 ? 'text-status-red' : 'text-muted')}>
-                    {(a.Closing_Balance_Local_CCY ?? 0).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </td>
-                  <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, (a.Closing_Balance_EUR ?? 0) > 0 ? 'text-white' : (a.Closing_Balance_EUR ?? 0) < 0 ? 'text-status-red' : 'text-muted')}>
-                    {formatAccountBalance(a.Closing_Balance_EUR ?? 0)}
-                  </td>
-                </tr>
-              )) : (
-                <tr>
-                  <td colSpan={7} className="px-5 py-8 text-center font-mono text-[11px] text-muted">
-                    No accounts for the current filter.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </DataCard>
+      <RegionSummaryTable
+        title="MEA Summary"
+        subtitle="Summary-sheet style position view for Middle East entities"
+        rows={filteredMeSummary}
+        totalLabel="MEA Total"
+      />
 
-      <SectionHeader title="Liquidity Summary" />
-      <DataCard subtitle={`${filteredLiquidity.length} entities in scope`} style={{ marginBottom: 24 }}>
-        <div style={{ overflowX: 'auto', padding: '4px 8px 8px 8px' }}>
-          <table className="w-full border-collapse min-w-[800px]">
-            <thead>
-              <tr className="bg-surface-2 border-b-2 border-border-2">
-                {['ARE', 'Entity', 'Ext. Liquidity', 'Ext. Debt', 'Int. Liquidity', 'Int. Debt', 'Net Position'].map((h, i) => (
-                  <th key={h} className={cn(headerClassName, i >= 2 ? 'text-right' : 'text-left')}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredLiquidity.length > 0 ? filteredLiquidity.map((a, i) => (
-                <tr key={`${a.ARE_Code}-${i}`} className={rowClassName}>
-                  <td className={`${cellPadding} font-mono text-[12px] font-bold text-white`}>{a.ARE_Code}</td>
-                  <td className={`${cellPadding} text-[11px] text-text-primary`}>{a.Entity_Name}</td>
-                  <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, (a.External_Liquidity ?? 0) > 0 ? 'text-status-green' : 'text-muted')}>
-                    {formatAccountBalance(a.External_Liquidity ?? 0)}
-                  </td>
-                  <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, (a.External_Debt ?? 0) < 0 ? 'text-status-red' : 'text-muted')}>
-                    {formatAccountBalance(a.External_Debt ?? 0)}
-                  </td>
-                  <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, (a.Internal_Liquidity ?? 0) > 0 ? 'text-status-green' : 'text-muted')}>
-                    {formatAccountBalance(a.Internal_Liquidity ?? 0)}
-                  </td>
-                  <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, (a.Internal_Debt ?? 0) < 0 ? 'text-status-red' : 'text-muted')}>
-                    {formatAccountBalance(a.Internal_Debt ?? 0)}
-                  </td>
-                  <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, (a.Net_Position ?? 0) > 0 ? 'text-white' : (a.Net_Position ?? 0) < 0 ? 'text-status-red' : 'text-muted')}>
-                    {formatAccountBalance(a.Net_Position ?? 0)}
-                  </td>
-                </tr>
-              )) : (
-                <tr>
-                  <td colSpan={7} className="px-5 py-8 text-center font-mono text-[11px] text-muted">
-                    No liquidity data for the current filter.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </DataCard>
+      <RegionSummaryTable
+        title="Africa Summary"
+        subtitle="Summary-sheet style position view for Africa entities"
+        rows={filteredAfricaSummary}
+        totalLabel="Africa Total"
+      />
     </div>
   );
 }

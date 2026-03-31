@@ -59,6 +59,27 @@ function formatEur(value: number): string {
   return `${sign}\u20AC${abs.toFixed(0)}`;
 }
 
+function formatHrDate(value: string): string {
+  if (!value) {
+    return '\u2014';
+  }
+
+  const isoDateMatch = value.match(/^\d{4}-\d{2}-\d{2}/);
+  if (isoDateMatch) {
+    return isoDateMatch[0];
+  }
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+
+  const year = parsed.getUTCFullYear();
+  const month = String(parsed.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(parsed.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function renderEmptyTableRow(colSpan: number) {
   return (
     <tr>
@@ -596,7 +617,7 @@ export function HrPanel() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '24px' }}>
-        <DataCard title="Middle East &mdash; Country Presence" subtitle="Entities per jurisdiction">
+        <DataCard title="Middle East — Country Presence" subtitle="Entities per jurisdiction">
           <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
             {hr.meCountries.map((country) => (
               <div key={country.countryCode} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -621,7 +642,7 @@ export function HrPanel() {
           </div>
         </DataCard>
 
-        <DataCard title="Africa &mdash; Country Presence" subtitle="Entities per jurisdiction">
+        <DataCard title="Africa — Country Presence" subtitle="Entities per jurisdiction">
           <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
             {hr.africaCountries.map((country) => (
               <div key={country.countryCode} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -696,7 +717,7 @@ export function HrPanel() {
                     <td className={`${cellPadding} text-[11px] text-text-primary`}>{item.Purpose}</td>
                     <td className={`${cellPadding} text-[11px] text-text-primary`}>{item.Bank_Name}</td>
                     <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{item.IBAN}</td>
-                    <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{item.date}</td>
+                    <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{formatHrDate(item.date)}</td>
                     <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, item.Amount > 0 ? 'text-status-green' : 'text-muted')}>
                       {formatEur(item.Amount)}
                     </td>

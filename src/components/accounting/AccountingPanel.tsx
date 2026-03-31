@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { KpiCard } from '../ui/KpiCard';
 import { DataCard } from '../ui/DataCard';
 import { SectionHeader } from '../ui/SectionHeader';
@@ -292,6 +293,28 @@ export function AccountingPanel() {
   const uniqueBanks = new Set(filtered.map((f) => f.Bank_Name)).size;
   const uniqueCurrencies = new Set(filtered.map((f) => f.CCY)).size;
 
+  const purposeChartData = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const item of filtered) {
+      const purpose = item.Purpose || 'Other';
+      map.set(purpose, (map.get(purpose) ?? 0) + item.Amount);
+    }
+    return [...map.entries()]
+      .map(([name, value]) => ({ name, value: Math.round(value) }))
+      .sort((a, b) => b.value - a.value);
+  }, [filtered]);
+
+  const bankChartData = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const item of filtered) {
+      const bank = item.Bank_Name || 'Unknown';
+      map.set(bank, (map.get(bank) ?? 0) + item.Amount);
+    }
+    return [...map.entries()]
+      .map(([name, value]) => ({ name, value: Math.round(value) }))
+      .sort((a, b) => b.value - a.value);
+  }, [filtered]);
+
   const headerClassName = 'px-5 py-3.5 font-mono text-[10px] font-semibold tracking-[1.5px] uppercase text-muted whitespace-nowrap';
   const rowClassName = 'border-b border-border-custom last:border-b-0 transition-colors hover:bg-[var(--color-accent-hover)]';
   const cellPadding = 'px-5 py-4';
@@ -310,10 +333,68 @@ export function AccountingPanel() {
       )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
-        <KpiCard label="Total Fundings" value={String(totalFundings)} subtitle="Funding records" gradient="default" />
+        <KpiCard label="Total Transactions" value={String(totalFundings)} subtitle="Funding records" gradient="default" />
         <KpiCard label="Total Amount" value={formatEur(totalAmount)} subtitle="EUR equivalent" gradient="green" />
         <KpiCard label="Banks" value={String(uniqueBanks)} subtitle="Unique banking partners" gradient="default" />
         <KpiCard label="Currencies" value={String(uniqueCurrencies)} subtitle="Unique currencies" gradient="default" />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
+        <DataCard title="Transactions by Purpose" subtitle="Total amount grouped by transaction purpose">
+          <div style={{ width: '100%', height: 300, padding: '8px' }}>
+            {purposeChartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={purposeChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} stroke="none">
+                    {purposeChartData.map((_, i) => (
+                      <Cell key={i} fill={['#009999', '#8a00e5', '#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#06b6d4', '#a78bfa'][i % 8]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border-2)', borderRadius: 8, fontFamily: 'var(--font-mono)', fontSize: 11 }}
+                    itemStyle={{ color: 'white' }}
+                    formatter={(value) => formatEur(Number(value))}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex items-center justify-center h-full font-mono text-[11px] text-muted">No data available</div>
+            )}
+            {purposeChartData.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-1 px-2">
+                {purposeChartData.map((entry, i) => (
+                  <div key={entry.name} className="flex items-center gap-1.5">
+                    <span className="inline-block w-2 h-2 rounded-full" style={{ background: ['#009999', '#8a00e5', '#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#06b6d4', '#a78bfa'][i % 8] }} />
+                    <span className="font-mono text-[9px] text-muted">{entry.name}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </DataCard>
+
+        <DataCard title="Transactions by Bank" subtitle="Total amount grouped by banking partner">
+          <div style={{ width: '100%', height: 300, padding: '8px 8px 8px 0' }}>
+            {bankChartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={bankChartData} layout="vertical" margin={{ left: 10, right: 20, top: 5, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border-2)" horizontal={false} />
+                  <XAxis type="number" tick={{ fill: 'var(--color-muted)', fontFamily: 'var(--font-mono)', fontSize: 10 }} tickFormatter={(v: number) => formatEur(v)} />
+                  <YAxis type="category" dataKey="name" width={120} tick={{ fill: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)', fontSize: 10 }} />
+                  <Tooltip
+                    contentStyle={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border-2)', borderRadius: 8, fontFamily: 'var(--font-mono)', fontSize: 11 }}
+                    itemStyle={{ color: 'white' }}
+                    formatter={(value) => formatEur(Number(value))}
+                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                  />
+                  <Bar dataKey="value" radius={[0, 4, 4, 0]} fill="#009999" />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex items-center justify-center h-full font-mono text-[11px] text-muted">No data available</div>
+            )}
+          </div>
+        </DataCard>
       </div>
 
       <SectionHeader

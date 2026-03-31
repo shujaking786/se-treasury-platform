@@ -27,13 +27,17 @@ function formatEntityCount(count: number): string {
 
 export function selectOverviewViewModel(filter: DashboardFilters) {
   const positions = [...mePositionRows, ...africaPositionRows].filter((row) => matchesAreCode(filter, row.areCode));
+  const mePositions = mePositionRows.filter((row) => matchesAreCode(filter, row.areCode));
+  const africaPositions = africaPositionRows.filter((row) => matchesAreCode(filter, row.areCode));
   const filteredEntities = legalEntities.filter((entity) => matchesAreCode(filter, entity.areCode));
   const meEntities = filteredEntities.filter((entity) => entity.region === 'ME');
   const africaEntities = filteredEntities.filter((entity) => entity.region === 'AFRICA');
 
-  const totalGroupLiquidity = filteredEntities.reduce((sum, entity) => sum + entity.netPositionEur, 0);
+  const meNetPosition = mePositions.reduce((sum, row) => sum + (row.totalNetPosition * 1_000_000), 0);
+  const africaNetPosition = africaPositions.reduce((sum, row) => sum + (row.totalNetPosition * 1_000_000), 0);
+  const totalGroupLiquidity = meNetPosition + africaNetPosition;
   const reservedForPayments = positions.reduce((sum, row) => sum + ((row.reserved ?? 0) * 1_000_000), 0);
-  const externalLiquidity = filteredEntities.reduce((sum, entity) => sum + entity.externalLiquidityEur, 0);
+  const externalLiquidity = positions.reduce((sum, row) => sum + (row.extLiquidity * 1_000_000), 0);
   const internalLiquidity = positions.reduce((sum, row) => sum + ((row.intLiquidity ?? 0) * 1_000_000), 0);
   const internalDebt = positions.reduce((sum, row) => sum + (row.intDebt * 1_000_000), 0);
   const uniqueCountries = new Set(filteredEntities.map((entity) => entity.countryCode)).size;
@@ -48,16 +52,16 @@ export function selectOverviewViewModel(filter: DashboardFilters) {
     },
     {
       label: 'ME Region',
-      value: formatEur(meEntities.reduce((sum, entity) => sum + entity.netPositionEur, 0)),
+      value: formatEur(meNetPosition),
       valueColor: 'white',
-      subtitle: `${formatEntityCount(meEntities.length)} · ${totalGroupLiquidity ? ((meEntities.reduce((sum, entity) => sum + entity.netPositionEur, 0) / totalGroupLiquidity) * 100).toFixed(1) : '0.0'}% of scope`,
+      subtitle: `${formatEntityCount(meEntities.length)} · ${totalGroupLiquidity ? ((meNetPosition / totalGroupLiquidity) * 100).toFixed(1) : '0.0'}% of scope`,
       gradient: 'default',
     },
     {
       label: 'Africa Region',
-      value: formatEur(africaEntities.reduce((sum, entity) => sum + entity.netPositionEur, 0)),
+      value: formatEur(africaNetPosition),
       valueColor: 'white',
-      subtitle: `${formatEntityCount(africaEntities.length)} · ${totalGroupLiquidity ? ((africaEntities.reduce((sum, entity) => sum + entity.netPositionEur, 0) / totalGroupLiquidity) * 100).toFixed(1) : '0.0'}% of scope`,
+      subtitle: `${formatEntityCount(africaEntities.length)} · ${totalGroupLiquidity ? ((africaNetPosition / totalGroupLiquidity) * 100).toFixed(1) : '0.0'}% of scope`,
       gradient: 'default',
     },
     {
@@ -76,16 +80,19 @@ export function selectOverviewViewModel(filter: DashboardFilters) {
     },
   ];
 
-  const topPositions = [...filteredEntities]
-    .sort((left, right) => right.netPositionEur - left.netPositionEur)
+  const topPositions = [...positions]
+    .sort((left, right) => right.totalNetPosition - left.totalNetPosition)
     .slice(0, 7)
-    .map((entity) => ({
-      code: entity.areCode,
-      value: formatEur(entity.netPositionEur),
-      pct: totalGroupLiquidity > 0 ? Math.max((Math.abs(entity.netPositionEur) / totalGroupLiquidity) * 100, 1) : 0,
-      variant: entity.netPositionEur < 0 ? 'breach' as const : 'safe' as const,
-      isNeg: entity.netPositionEur < 0,
-    }));
+    .map((row) => {
+      const netPosition = row.totalNetPosition * 1_000_000;
+      return {
+        code: row.areCode,
+        value: formatEur(netPosition),
+        pct: totalGroupLiquidity > 0 ? Math.max((Math.abs(netPosition) / totalGroupLiquidity) * 100, 1) : 0,
+        variant: netPosition < 0 ? 'breach' as const : 'safe' as const,
+        isNeg: netPosition < 0,
+      };
+    });
 
   const alerts: Alert[] = [
     ...bankingPartnerLimits
@@ -94,7 +101,7 @@ export function selectOverviewViewModel(filter: DashboardFilters) {
       .slice(0, 3)
       .map((limit): Alert => ({
         id: `limit-${limit.partner}`,
-        text: `${limit.partner} ${limit.status === 'BREACH' ? 'BREACH' : 'NEAR-LIMIT'} — ${limit.utilizationPct.toFixed(1)}%`,
+        text: `${limit.partner} ${limit.status === 'BREACH' ? 'BREACH' : 'NEAR-LIMIT'} - ${limit.utilizationPct.toFixed(1)}%`,
         severity: limit.status === 'BREACH' ? 'red' : 'amber',
       })),
     ...filteredEntities
@@ -102,7 +109,7 @@ export function selectOverviewViewModel(filter: DashboardFilters) {
       .slice(0, 2)
       .map((entity): Alert => ({
         id: `negative-${entity.areCode}`,
-        text: `${entity.areCode} ${entity.country} — NET NEGATIVE ${formatEur(entity.netPositionEur)}`,
+        text: `${entity.areCode} ${entity.country} - NET NEGATIVE ${formatEur(entity.netPositionEur)}`,
         severity: 'red',
       })),
   ];
@@ -118,8 +125,8 @@ export function selectOverviewViewModel(filter: DashboardFilters) {
   return {
     alerts,
     kpis,
-    meNetPosition: meEntities.reduce((sum, entity) => sum + entity.netPositionEur, 0),
-    africaNetPosition: africaEntities.reduce((sum, entity) => sum + entity.netPositionEur, 0),
+    meNetPosition,
+    africaNetPosition,
     totalNetPosition: totalGroupLiquidity,
     externalLiquidity,
     internalLiquidity,

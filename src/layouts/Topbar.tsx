@@ -224,21 +224,6 @@ export function Topbar() {
         }}>
           Next Refresh <span style={{ color: 'var(--color-text-primary)' }}>09:00 CET</span>
         </div>
-        <div style={{
-          width: 28,
-          height: 28,
-          borderRadius: 9999,
-          backgroundImage: 'var(--gradient-avatar)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 11,
-          fontWeight: 700,
-          color: '#ffffff',
-          cursor: 'pointer',
-        }}>
-          DH
-        </div>
       </div>
     </div>
   );

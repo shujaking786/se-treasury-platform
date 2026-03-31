@@ -7,6 +7,6 @@ export const NAV_TABS = [
   { id: 'accounts', label: 'Accounts', path: '/accounts' },
   { id: 'legal', label: 'Legal', path: '/legal' },
   { id: 'hr', label: 'HR', path: '/hr' },
-  { id: 'financial-summary', label: 'Financial Summary', path: '/financial-summary' },
+  { id: 'financial-summary', label: 'Financial Status Report', path: '/financial-summary' },
   { id: 'accounting', label: 'Accounting', path: '/accounting' },
 ] as const;

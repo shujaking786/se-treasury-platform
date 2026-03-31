@@ -74,7 +74,7 @@ export function CompetitivePanel() {
           THE 30-SECOND WIN ARGUMENT
         </div>
         <div className="text-[14px] font-semibold text-white leading-[1.7]">
-          &ldquo;Ripple solves how money moves. You told us you need to know where money is &mdash; across 22 entities, 16 countries &mdash; with limit breaches flagged, payroll reserved, MTO countries handled, and a four-eyes governance trail. That is a different problem. We built exactly what you described. And we can show you your own FSR report, automated from your own data, next week.&rdquo;
+          {'\u201C'}Ripple solves how money moves. You told us you need to know where money is — across 22 entities, 16 countries — with limit breaches flagged, payroll reserved, MTO countries handled, and a four-eyes governance trail. That is a different problem. We built exactly what you described. And we can show you your own FSR report, automated from your own data, next week.{'\u201D'}
         </div>
         <div className="mt-4 flex gap-3 flex-wrap">
           {proofPoints.map((pp) => (

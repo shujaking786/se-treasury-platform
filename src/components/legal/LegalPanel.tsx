@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { KpiCard } from '../ui/KpiCard';
 import { DataCard } from '../ui/DataCard';
 import { Pill } from '../ui/Pill';
@@ -6,8 +6,7 @@ import { SectionHeader } from '../ui/SectionHeader';
 import { cn } from '../../utils/cn';
 import { useStore } from '../../store';
 import { selectLegalViewModel } from '../../selectors/legal';
-import { getCanonicalBankKey, matchesAreCode } from '../../selectors/filtering';
-import { fetchFsrLiquiditySummary, type FsrLiquiditySummary } from '../../data/hr';
+import { getCanonicalBankKey } from '../../selectors/filtering';
 import { externalFacilities, internalLoans, legalEntities, type ExternalFacility, type InternalLoan, type LegalEntity } from '../../data/legal';
 
 const LEGAL_ENTITY_STORAGE_KEY = 'legal_entities_local';
@@ -643,7 +642,7 @@ function EntityTableWithStyles({
   return (
     <>
       <SectionHeader
-        title={`${regionLabel} &mdash; Legal Entities`}
+        title={`${regionLabel} \u2014 Legal Entities`}
         rightContent={<button type="button" style={addBtnStyle} onClick={onAdd}>Add Entity</button>}
       />
       <DataCard style={{ marginBottom: 24, overflowX: 'auto' }}>
@@ -692,7 +691,7 @@ function EntityTableWithStyles({
                                 <span key={partner} className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-surface-2 text-muted">{partner}</span>
                               ))
                             ) : (
-                              <span className="text-[9px] text-muted">&mdash;</span>
+                              <span className="text-[9px] text-muted">{'\u2014'}</span>
                             )}
                           </div>
                         </td>
@@ -737,17 +736,12 @@ export function LegalPanel() {
   const rowClassName = 'border-b border-border-custom last:border-b-0 transition-colors hover:bg-[var(--color-accent-hover)]';
   const cellPadding = 'px-5 py-4';
 
-  const [liquiditySummary, setLiquiditySummary] = useState<FsrLiquiditySummary[]>([]);
   const [localEntities, setLocalEntities] = useState<LegalEntity[]>(() => getLocalItems<LegalEntity>(LEGAL_ENTITY_STORAGE_KEY));
   const [localFacilities, setLocalFacilities] = useState<ExternalFacility[]>(() => getLocalItems<ExternalFacility>(LEGAL_FACILITY_STORAGE_KEY));
   const [localLoans, setLocalLoans] = useState<InternalLoan[]>(() => getLocalItems<InternalLoan>(LEGAL_LOAN_STORAGE_KEY));
   const [entityModalRegion, setEntityModalRegion] = useState<LegalEntity['region'] | null>(null);
   const [showFacilityModal, setShowFacilityModal] = useState(false);
   const [showLoanModal, setShowLoanModal] = useState(false);
-
-  useEffect(() => {
-    fetchFsrLiquiditySummary().then(setLiquiditySummary);
-  }, []);
 
   const allLegalEntities = useMemo(() => [...legalEntities, ...localEntities], [localEntities]);
   const allExternalFacilities = useMemo(() => [...externalFacilities, ...localFacilities], [localFacilities]);
@@ -790,23 +784,6 @@ export function LegalPanel() {
     setLocalLoans(updated);
     setShowLoanModal(false);
   }, []);
-
-  const filteredLiquidity = liquiditySummary.filter((item) => matchesAreCode(activeFilters, item.ARE_Code));
-
-  const liquidityEntityLookup = useMemo(() => {
-    const map = new Map<string, { name: string }>();
-    for (const entity of allLegalEntities) {
-      map.set(entity.areCode, { name: entity.name });
-    }
-    return map;
-  }, [allLegalEntities]);
-
-  const enrichedLiquidity = useMemo(() => (
-    filteredLiquidity.map((item) => ({
-      ...item,
-      Entity_Name: item.Entity_Name || liquidityEntityLookup.get(item.ARE_Code)?.name || item.Entity_Name,
-    }))
-  ), [filteredLiquidity, liquidityEntityLookup]);
 
   const bankNameLookup = useMemo(() => {
     const map = new Map<string, string>();
@@ -993,71 +970,6 @@ export function LegalPanel() {
                 </>
               ) : (
                 renderEmptyTableRow(8)
-              )}
-            </tbody>
-          </table>
-        </div>
-      </DataCard>
-
-      <SectionHeader title="FSR Liquidity Summary" />
-      <DataCard style={{ marginBottom: 24 }}>
-        <div style={{ overflowX: 'auto', padding: '0 8px 8px 8px' }}>
-          <table className="w-full border-collapse min-w-[1000px]">
-            <thead>
-              <tr className="bg-surface-2 border-b-2 border-border-2">
-                {['ARE Code', 'Entity Name', 'Ext. Liquidity', 'Ext. Debt', 'Int. Liquidity', 'Int. Debt', 'Total Liquidity', 'Total Debt', 'Net Position'].map((heading, index) => (
-                  <th
-                    key={heading}
-                    className={cn(
-                      headerClassName,
-                      index >= 2 ? 'text-right' : 'text-left',
-                    )}
-                  >
-                    {heading}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {enrichedLiquidity.length > 0 ? (
-                <>
-                  {enrichedLiquidity.map((item) => {
-                    const isNegative = item.Net_Position < 0;
-
-                    return (
-                      <tr key={item.ARE_Code} className={rowClassName}>
-                        <td className={`${cellPadding} font-mono text-[12px] font-bold text-white`}>{item.ARE_Code}</td>
-                        <td className={`${cellPadding} text-[11px] text-text-primary`}>{item.Entity_Name}</td>
-                        <td className={`${cellPadding} text-right font-mono text-[12px] text-text-primary`}>{formatEur(item.External_Liquidity)}</td>
-                        <td className={`${cellPadding} text-right font-mono text-[12px] text-text-primary`}>{formatEur(item.External_Debt)}</td>
-                        <td className={`${cellPadding} text-right font-mono text-[12px] text-text-primary`}>{formatEur(item.Internal_Liquidity)}</td>
-                        <td className={`${cellPadding} text-right font-mono text-[12px] text-text-primary`}>{formatEur(item.Internal_Debt)}</td>
-                        <td className={`${cellPadding} text-right font-mono text-[12px] text-text-primary`}>{formatEur(item.Total_Liquidity)}</td>
-                        <td className={`${cellPadding} text-right font-mono text-[12px] text-text-primary`}>{formatEur(item.Total_Debt)}</td>
-                        <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, isNegative ? 'text-status-red' : 'text-status-green')}>
-                          {formatEur(item.Net_Position)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                  <tr className="bg-surface-2/60 border-t border-border-2">
-                    <td colSpan={2} className={`${cellPadding} font-mono text-[10px] font-semibold tracking-[1px] uppercase text-muted`}>TOTAL</td>
-                    <td className={`${cellPadding} text-right font-mono font-bold text-white`}>{formatEur(enrichedLiquidity.reduce((sum, item) => sum + item.External_Liquidity, 0))}</td>
-                    <td className={`${cellPadding} text-right font-mono font-bold text-white`}>{formatEur(enrichedLiquidity.reduce((sum, item) => sum + item.External_Debt, 0))}</td>
-                    <td className={`${cellPadding} text-right font-mono font-bold text-white`}>{formatEur(enrichedLiquidity.reduce((sum, item) => sum + item.Internal_Liquidity, 0))}</td>
-                    <td className={`${cellPadding} text-right font-mono font-bold text-white`}>{formatEur(enrichedLiquidity.reduce((sum, item) => sum + item.Internal_Debt, 0))}</td>
-                    <td className={`${cellPadding} text-right font-mono font-bold text-white`}>{formatEur(enrichedLiquidity.reduce((sum, item) => sum + item.Total_Liquidity, 0))}</td>
-                    <td className={`${cellPadding} text-right font-mono font-bold text-white`}>{formatEur(enrichedLiquidity.reduce((sum, item) => sum + item.Total_Debt, 0))}</td>
-                    <td className={cn(
-                      `${cellPadding} text-right font-mono font-bold`,
-                      enrichedLiquidity.reduce((sum, item) => sum + item.Net_Position, 0) < 0 ? 'text-status-red' : 'text-status-green',
-                    )}>
-                      {formatEur(enrichedLiquidity.reduce((sum, item) => sum + item.Net_Position, 0))}
-                    </td>
-                  </tr>
-                </>
-              ) : (
-                renderEmptyTableRow(9)
               )}
             </tbody>
           </table>
