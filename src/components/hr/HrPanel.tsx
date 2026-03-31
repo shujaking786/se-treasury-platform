@@ -10,6 +10,7 @@ import { fetchHrFunding, type HrFunding, type EntityContact } from '../../data/h
 import { legalEntities } from '../../data/legal';
 import { bankAccounts } from '../../data/accounts';
 import { matchesAreCode } from '../../selectors/filtering';
+import { getAllProjectCurrencyCodes } from '../../utils/projectCurrencies';
 
 const FUNDING_STORAGE_KEY = 'hr_fundings_local';
 const ENTITY_STORAGE_KEY = 'hr_entities_local';
@@ -454,7 +455,7 @@ function AddEntityModal({ onClose, onSubmit, entityOptions, countryOptions, enti
             </div>
             <div>
               <label style={labelStyle}>Entity Name</label>
-              <input style={{ ...inputStyle, opacity: 0.7 }} value={form.entityName} readOnly tabIndex={-1} />
+              <input style={inputStyle} value={form.entityName} onChange={(e) => handleChange('entityName', e.target.value)} required />
             </div>
             <div>
               <label style={labelStyle}>Country</label>
@@ -530,10 +531,11 @@ export function HrPanel() {
   const allEntityContacts = hr.entityContacts;
 
   // Build filter-aware dropdown options
-  const filteredLegalEntities = useMemo(
-    () => legalEntities.filter((e) => matchesAreCode(activeFilters, e.areCode)),
-    [activeFilters],
+  const allLegalEntities = useMemo(
+    () => legalEntities.slice().sort((left, right) => left.areCode.localeCompare(right.areCode)),
+    [],
   );
+  const filteredLegalEntities = allLegalEntities;
 
   const filteredBankAccounts = useMemo(
     () => bankAccounts.filter((a) => matchesAreCode(activeFilters, a.areCode)),
@@ -565,9 +567,12 @@ export function HrPanel() {
   }, [dropdownSourceAccounts]);
 
   const ccyOptions = useMemo<DropdownOption[]>(() => {
-    const unique = [...new Set(dropdownSourceAccounts.map((a) => a.ccy))].sort();
+    const unique = getAllProjectCurrencyCodes([
+      ...dropdownSourceAccounts.map((account) => account.ccy),
+      ...allFundings.map((funding) => funding.CCY),
+    ]);
     return unique.map((c) => ({ value: c, label: c }));
-  }, [dropdownSourceAccounts]);
+  }, [dropdownSourceAccounts, allFundings]);
 
   const purposeOptions = useMemo<DropdownOption[]>(() => [
     { value: 'Payroll', label: 'Payroll' },

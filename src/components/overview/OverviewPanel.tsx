@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import { AlertBanner } from '../ui/AlertBanner';
 import { KpiCard } from '../ui/KpiCard';
 import { DataCard } from '../ui/DataCard';
@@ -6,8 +7,8 @@ import { Pill } from '../ui/Pill';
 import { SectionHeader } from '../ui/SectionHeader';
 import { cn } from '../../utils/cn';
 import { useStore } from '../../store';
-import { mePositionRows, africaPositionRows } from '../../data';
-import { selectOverviewViewModel } from '../../selectors/overview';
+import { fetchFinalSummary, type FinalSummaryItem } from '../../data/hr';
+import { mapFinalSummaryRows, selectOverviewViewModel } from '../../selectors/overview';
 import { matchesAreCode } from '../../selectors/filtering';
 import type { PositionRow, StatusVariant } from '../../types';
 
@@ -195,9 +196,19 @@ function RegionSummaryTable({
 
 export function OverviewPanel() {
   const activeFilters = useStore((state) => state.activeFilters);
-  const overview = selectOverviewViewModel(activeFilters);
-  const filteredMeSummary = mePositionRows.filter((row) => matchesAreCode(activeFilters, row.areCode.replace(' \u26A0', '')));
-  const filteredAfricaSummary = africaPositionRows.filter((row) => matchesAreCode(activeFilters, row.areCode));
+  const [finalSummaryRows, setFinalSummaryRows] = useState<FinalSummaryItem[]>([]);
+
+  useEffect(() => {
+    fetchFinalSummary().then(setFinalSummaryRows);
+  }, []);
+
+  const mappedSummary = useMemo(() => mapFinalSummaryRows(finalSummaryRows), [finalSummaryRows]);
+  const overview = useMemo(
+    () => selectOverviewViewModel(activeFilters, mappedSummary.meRows, mappedSummary.africaRows),
+    [activeFilters, mappedSummary],
+  );
+  const filteredMeSummary = mappedSummary.meRows.filter((row) => matchesAreCode(activeFilters, row.areCode));
+  const filteredAfricaSummary = mappedSummary.africaRows.filter((row) => matchesAreCode(activeFilters, row.areCode));
 
   return (
     <div>

@@ -8,9 +8,12 @@ import { legalEntities } from '../../data/legal';
 import { depositAccounts as seededDepositAccounts, type DepositAccount } from '../../data/accounts';
 import { getCanonicalBankKey, matchesAreCode } from '../../selectors/filtering';
 import { fetchFsrAccountDetails, fetchBankAccounts, type DimBankAccount, type FsrAccountDetail } from '../../data/hr';
+import { getAllProjectCurrencyCodes } from '../../utils/projectCurrencies';
 
 const EXTERNAL_ACCOUNT_STORAGE_KEY = 'accounts_external_local';
 const DEPOSIT_ACCOUNT_STORAGE_KEY = 'accounts_deposit_local';
+const BANK_ACCOUNT_STORAGE_KEY = 'accounts_bank_local';
+const BANKING_PARTNER_STORAGE_KEY = 'accounts_partner_local';
 
 interface BankingPartnerRow {
   bank: string;
@@ -27,6 +30,16 @@ interface ExternalAccountRow extends FsrAccountDetail {
 interface DropdownOption {
   value: string;
   label: string;
+}
+
+interface LocalBankingPartner {
+  bank: string;
+}
+
+interface EntityLookupValue {
+  name: string;
+  country: string;
+  region: string;
 }
 
 function getLocalItems<T>(storageKey: string): T[] {
@@ -177,6 +190,18 @@ const submitBtnStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
+const headerActionBtnStyle: React.CSSProperties = {
+  padding: '8px 12px',
+  fontFamily: 'var(--font-mono)',
+  fontSize: 10,
+  letterSpacing: 0.5,
+  color: 'white',
+  background: 'var(--color-accent)',
+  border: 'none',
+  borderRadius: 6,
+  cursor: 'pointer',
+};
+
 const selectWrapperStyle: React.CSSProperties = {
   position: 'relative',
   width: '100%',
@@ -229,16 +254,14 @@ function AddExternalAccountModal({
   onClose,
   onSubmit,
   entityOptions,
-  bankOptions,
   ccyOptions,
   entityLookup,
 }: {
   onClose: () => void;
   onSubmit: (item: ExternalAccountRow) => void;
   entityOptions: DropdownOption[];
-  bankOptions: DropdownOption[];
   ccyOptions: DropdownOption[];
-  entityLookup: Map<string, { name: string }>;
+  entityLookup: Map<string, EntityLookupValue>;
 }) {
   const [form, setForm] = useState({
     ARE_Code: '',
@@ -246,8 +269,6 @@ function AddExternalAccountModal({
     Bank_Name: '',
     Account: '',
     CCY: '',
-    Closing_Balance: '',
-    Closing_Balance_EUR: '',
     Comment: '',
   });
 
@@ -269,9 +290,9 @@ function AddExternalAccountModal({
       Bank_Name: form.Bank_Name.trim(),
       Account: form.Account.trim(),
       CCY: form.CCY.trim().toUpperCase(),
-      Closing_Balance: parseNumber(form.Closing_Balance),
-      Closing_Balance_EUR: parseNumber(form.Closing_Balance_EUR),
-      Closing_Balance_Local_CCY: parseNumber(form.Closing_Balance),
+      Closing_Balance: 0,
+      Closing_Balance_EUR: 0,
+      Closing_Balance_Local_CCY: 0,
       Local_CCY: form.CCY.trim().toUpperCase(),
       Comment: form.Comment.trim() || null,
     });
@@ -283,7 +304,7 @@ function AddExternalAccountModal({
     <div style={modalOverlayStyle} onClick={onClose}>
       <div style={modalBoxStyle} onClick={(e) => e.stopPropagation()}>
         <div style={modalHeaderStyle}>
-          <h2 style={modalTitleStyle}>Add External Account</h2>
+          <h2 style={modalTitleStyle}>Add Bank Account</h2>
           <button type="button" onClick={onClose} style={closeBtnStyle}>&times;</button>
         </div>
         <form onSubmit={handleSubmit} style={modalFormStyle}>
@@ -297,8 +318,8 @@ function AddExternalAccountModal({
               <input style={{ ...inputStyle, opacity: 0.7 }} value={form.Entity_Name} readOnly tabIndex={-1} />
             </div>
             <div>
-              <label style={labelStyle}>Bank</label>
-              <ModalSelect value={form.Bank_Name} onChange={(value) => handleChange('Bank_Name', value)} options={bankOptions} placeholder="Select bank..." required />
+              <label style={labelStyle}>Bank Name</label>
+              <input style={inputStyle} value={form.Bank_Name} onChange={(e) => handleChange('Bank_Name', e.target.value)} placeholder="Enter bank name" required />
             </div>
             <div>
               <label style={labelStyle}>Account</label>
@@ -307,14 +328,6 @@ function AddExternalAccountModal({
             <div>
               <label style={labelStyle}>CCY</label>
               <ModalSelect value={form.CCY} onChange={(value) => handleChange('CCY', value)} options={ccyOptions} placeholder="Select currency..." required />
-            </div>
-            <div>
-              <label style={labelStyle}>Balance (Local)</label>
-              <input type="number" step="0.01" style={inputStyle} value={form.Closing_Balance} onChange={(e) => handleChange('Closing_Balance', e.target.value)} required />
-            </div>
-            <div>
-              <label style={labelStyle}>Balance (EUR)</label>
-              <input type="number" step="0.01" style={inputStyle} value={form.Closing_Balance_EUR} onChange={(e) => handleChange('Closing_Balance_EUR', e.target.value)} required />
             </div>
             <div>
               <label style={labelStyle}>Comment</label>
@@ -335,16 +348,14 @@ function AddDepositAccountModal({
   onClose,
   onSubmit,
   entityOptions,
-  bankOptions,
   ccyOptions,
   entityLookup,
 }: {
   onClose: () => void;
   onSubmit: (item: DepositAccount) => void;
   entityOptions: DropdownOption[];
-  bankOptions: DropdownOption[];
   ccyOptions: DropdownOption[];
-  entityLookup: Map<string, { name: string }>;
+  entityLookup: Map<string, EntityLookupValue>;
 }) {
   const [form, setForm] = useState({
     areCode: '',
@@ -402,8 +413,8 @@ function AddDepositAccountModal({
               <input style={{ ...inputStyle, opacity: 0.7 }} value={form.entityName} readOnly tabIndex={-1} />
             </div>
             <div>
-              <label style={labelStyle}>Bank</label>
-              <ModalSelect value={form.bank} onChange={(value) => handleChange('bank', value)} options={bankOptions} placeholder="Select bank..." required />
+              <label style={labelStyle}>Bank Name</label>
+              <input style={inputStyle} value={form.bank} onChange={(e) => handleChange('bank', e.target.value)} placeholder="Enter bank name" required />
             </div>
             <div>
               <label style={labelStyle}>Account</label>
@@ -440,19 +451,61 @@ function AddDepositAccountModal({
   );
 }
 
+function AddBankingPartnerModal({
+  onClose,
+  onSubmit,
+}: {
+  onClose: () => void;
+  onSubmit: (item: LocalBankingPartner) => void;
+}) {
+  const [bank, setBank] = useState('');
+  const closeBtnStyle: React.CSSProperties = { padding: 4, background: 'none', border: 'none', color: 'var(--color-muted)', fontSize: 20, cursor: 'pointer' };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({ bank: bank.trim() });
+  };
+
+  return (
+    <div style={modalOverlayStyle} onClick={onClose}>
+      <div style={{ ...modalBoxStyle, maxWidth: 520 }} onClick={(e) => e.stopPropagation()}>
+        <div style={modalHeaderStyle}>
+          <h2 style={modalTitleStyle}>Add Banking Partner</h2>
+          <button type="button" onClick={onClose} style={closeBtnStyle}>&times;</button>
+        </div>
+        <form onSubmit={handleSubmit} style={modalFormStyle}>
+          <div>
+            <label style={labelStyle}>Bank Name</label>
+            <input style={inputStyle} value={bank} onChange={(e) => setBank(e.target.value)} placeholder="Enter banking partner name" required />
+          </div>
+          <div style={modalFooterStyle}>
+            <button type="button" onClick={onClose} style={cancelBtnStyle}>Cancel</button>
+            <button type="submit" style={submitBtnStyle}>Add Partner</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export function AccountsPanel() {
   const activeFilters = useStore((state) => state.activeFilters);
   const [fsrData, setFsrData] = useState<FsrAccountDetail[]>([]);
   const [bankData, setBankData] = useState<DimBankAccount[]>([]);
+  const [localBankAccounts, setLocalBankAccounts] = useState<DimBankAccount[]>(() => getLocalItems<DimBankAccount>(BANK_ACCOUNT_STORAGE_KEY));
   const [localExternalAccounts, setLocalExternalAccounts] = useState<ExternalAccountRow[]>(() => getLocalItems<ExternalAccountRow>(EXTERNAL_ACCOUNT_STORAGE_KEY));
   const [localDepositAccounts, setLocalDepositAccounts] = useState<DepositAccount[]>(() => getLocalItems<DepositAccount>(DEPOSIT_ACCOUNT_STORAGE_KEY));
+  const [localBankingPartners, setLocalBankingPartners] = useState<LocalBankingPartner[]>(() => getLocalItems<LocalBankingPartner>(BANKING_PARTNER_STORAGE_KEY));
   const [showExternalModal, setShowExternalModal] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showPartnerModal, setShowPartnerModal] = useState(false);
 
   useEffect(() => {
     fetchFsrAccountDetails().then(setFsrData);
     fetchBankAccounts().then(setBankData);
   }, []);
+
+  const combinedBankAccounts = useMemo<DimBankAccount[]>(() => [...bankData, ...localBankAccounts], [bankData, localBankAccounts]);
 
   const allExternalAccounts = useMemo<ExternalAccountRow[]>(() => {
     const externalFsrAccounts = fsrData.filter((item) => item.Account_Type === 'External');
@@ -473,7 +526,7 @@ export function AccountsPanel() {
       }
     }
 
-    const rows: ExternalAccountRow[] = bankData.map((dim) => {
+    const rows: ExternalAccountRow[] = combinedBankAccounts.map((dim) => {
       const accountKey = normalizeAccountKey(dim.account_name);
       const directFsrMatch = fsrByAccount.get(accountKey);
       const areCurrencyKey = `${dim.ARE.toUpperCase()}|${dim.CCY.trim().toUpperCase()}`;
@@ -504,12 +557,14 @@ export function AccountsPanel() {
     }
 
     return rows;
-  }, [fsrData, bankData, localExternalAccounts]);
+  }, [fsrData, combinedBankAccounts, localExternalAccounts]);
   const allDepositAccounts = useMemo<DepositAccount[]>(() => [...seededDepositAccounts, ...localDepositAccounts], [localDepositAccounts]);
 
   const entityLookup = useMemo(() => {
-    const map = new Map<string, { name: string }>();
-    for (const entity of legalEntities) map.set(entity.areCode, { name: entity.name });
+    const map = new Map<string, EntityLookupValue>();
+    for (const entity of legalEntities) {
+      map.set(entity.areCode, { name: entity.name, country: entity.country, region: entity.region });
+    }
     return map;
   }, []);
 
@@ -520,23 +575,14 @@ export function AccountsPanel() {
       .map((entity) => ({ value: entity.areCode, label: `${entity.areCode} - ${entity.name}` }))
   ), []);
 
-  const bankOptions = useMemo<DropdownOption[]>(() => {
-    const uniqueBanks = [...new Set([
-      ...bankData.map((item) => item.bank),
-      ...allExternalAccounts.map((item) => item.Bank_Name).filter((value): value is string => Boolean(value)),
-      ...allDepositAccounts.map((item) => item.bank),
-    ])].sort();
-    return uniqueBanks.map((bank) => ({ value: bank, label: bank }));
-  }, [bankData, allExternalAccounts, allDepositAccounts]);
-
   const ccyOptions = useMemo<DropdownOption[]>(() => {
-    const uniqueCurrencies = [...new Set([
-      ...bankData.map((item) => item.CCY),
+    const uniqueCurrencies = getAllProjectCurrencyCodes([
+      ...combinedBankAccounts.map((item) => item.CCY),
       ...allExternalAccounts.map((item) => item.CCY),
       ...allDepositAccounts.map((item) => item.ccy),
-    ])].sort();
+    ]);
     return uniqueCurrencies.map((ccy) => ({ value: ccy, label: ccy }));
-  }, [bankData, allExternalAccounts, allDepositAccounts]);
+  }, [combinedBankAccounts, allExternalAccounts, allDepositAccounts]);
 
   const enrichedExternalAccounts = useMemo<ExternalAccountRow[]>(() => allExternalAccounts, [allExternalAccounts]);
 
@@ -548,10 +594,10 @@ export function AccountsPanel() {
   );
 
   const filteredBankAccounts = useMemo(
-    () => bankData
+    () => combinedBankAccounts
       .filter((item) => item.ARE && matchesAreCode(activeFilters, item.ARE))
       .sort((a, b) => a.bank.localeCompare(b.bank)),
-    [bankData, activeFilters],
+    [combinedBankAccounts, activeFilters],
   );
 
   const [bankPage, setBankPage] = useState(1);
@@ -576,8 +622,15 @@ export function AccountsPanel() {
         summaryMap.set(bank, { bank, accountCount: 1, totalBalanceEur: item.Closing_Balance_EUR, entities: [entity], currencies: [item.CCY] });
       }
     }
+    for (const partner of localBankingPartners) {
+      const bank = partner.bank.trim();
+      if (!bank) continue;
+      if (!summaryMap.has(bank)) {
+        summaryMap.set(bank, { bank, accountCount: 0, totalBalanceEur: 0, entities: [], currencies: [] });
+      }
+    }
     return [...summaryMap.values()].sort((left, right) => right.totalBalanceEur - left.totalBalanceEur);
-  }, [filteredExternalAccounts]);
+  }, [filteredExternalAccounts, localBankingPartners]);
 
   const [partnerPage, setPartnerPage] = useState(1);
   const PARTNER_PAGE_SIZE = 10;
@@ -617,17 +670,80 @@ export function AccountsPanel() {
   }, [filteredExternalAccounts]);
 
   const handleAddExternalAccount = useCallback((item: ExternalAccountRow) => {
-    const updated = [...getLocalItems<ExternalAccountRow>(EXTERNAL_ACCOUNT_STORAGE_KEY), item];
-    saveLocalItems(EXTERNAL_ACCOUNT_STORAGE_KEY, updated);
-    setLocalExternalAccounts(updated);
+    const updatedExternal = [...getLocalItems<ExternalAccountRow>(EXTERNAL_ACCOUNT_STORAGE_KEY), item];
+    saveLocalItems(EXTERNAL_ACCOUNT_STORAGE_KEY, updatedExternal);
+    setLocalExternalAccounts(updatedExternal);
+
+    const entity = entityLookup.get(item.ARE_Code ?? '');
+    const normalizedAccountKey = normalizeAccountKey(item.Account);
+    const existingLocalBankAccounts = getLocalItems<DimBankAccount>(BANK_ACCOUNT_STORAGE_KEY);
+    const localBankAccountExists = existingLocalBankAccounts.some((account) => normalizeAccountKey(account.account_name) === normalizedAccountKey);
+    if (!localBankAccountExists) {
+      const updatedBankAccounts = [
+        ...existingLocalBankAccounts,
+        {
+          account_name: item.Account,
+          bank: item.Bank_Name ?? 'Unknown bank',
+          CCY: item.CCY,
+          ARE: item.ARE_Code ?? '',
+          are_name: item.Entity_Name ?? entity?.name ?? '',
+          country: entity?.country ?? '',
+          currency: item.Local_CCY ?? item.CCY,
+          region: entity?.region ?? '',
+        },
+      ];
+      saveLocalItems(BANK_ACCOUNT_STORAGE_KEY, updatedBankAccounts);
+      setLocalBankAccounts(updatedBankAccounts);
+    }
+
+    const bankName = item.Bank_Name?.trim();
+    if (bankName) {
+      const existingPartners = getLocalItems<LocalBankingPartner>(BANKING_PARTNER_STORAGE_KEY);
+      const partnerExists = existingPartners.some((partner) => getCanonicalBankKey(partner.bank) === getCanonicalBankKey(bankName));
+      if (!partnerExists) {
+        const updatedPartners = [...existingPartners, { bank: bankName }];
+        saveLocalItems(BANKING_PARTNER_STORAGE_KEY, updatedPartners);
+        setLocalBankingPartners(updatedPartners);
+      }
+    }
+
     setShowExternalModal(false);
-  }, []);
+  }, [entityLookup]);
 
   const handleAddDepositAccount = useCallback((item: DepositAccount) => {
     const updated = [...getLocalItems<DepositAccount>(DEPOSIT_ACCOUNT_STORAGE_KEY), item];
     saveLocalItems(DEPOSIT_ACCOUNT_STORAGE_KEY, updated);
     setLocalDepositAccounts(updated);
+
+    const bankName = item.bank.trim();
+    if (bankName) {
+      const existingPartners = getLocalItems<LocalBankingPartner>(BANKING_PARTNER_STORAGE_KEY);
+      const partnerExists = existingPartners.some((partner) => getCanonicalBankKey(partner.bank) === getCanonicalBankKey(bankName));
+      if (!partnerExists) {
+        const updatedPartners = [...existingPartners, { bank: bankName }];
+        saveLocalItems(BANKING_PARTNER_STORAGE_KEY, updatedPartners);
+        setLocalBankingPartners(updatedPartners);
+      }
+    }
+
     setShowDepositModal(false);
+  }, []);
+
+  const handleAddBankingPartner = useCallback((item: LocalBankingPartner) => {
+    const bankName = item.bank.trim();
+    if (!bankName) return;
+
+    const existing = getLocalItems<LocalBankingPartner>(BANKING_PARTNER_STORAGE_KEY);
+    const alreadyExists = existing.some((partner) => getCanonicalBankKey(partner.bank) === getCanonicalBankKey(bankName));
+    if (alreadyExists) {
+      setShowPartnerModal(false);
+      return;
+    }
+
+    const updated = [...existing, { bank: bankName }];
+    saveLocalItems(BANKING_PARTNER_STORAGE_KEY, updated);
+    setLocalBankingPartners(updated);
+    setShowPartnerModal(false);
   }, []);
 
   const headerClassName = 'px-5 py-3.5 font-mono text-[10px] font-semibold tracking-[1.5px] uppercase text-muted whitespace-nowrap';
@@ -636,8 +752,9 @@ export function AccountsPanel() {
 
   return (
     <div>
-      {showExternalModal && <AddExternalAccountModal onClose={() => setShowExternalModal(false)} onSubmit={handleAddExternalAccount} entityOptions={entityOptions} bankOptions={bankOptions} ccyOptions={ccyOptions} entityLookup={entityLookup} />}
-      {showDepositModal && <AddDepositAccountModal onClose={() => setShowDepositModal(false)} onSubmit={handleAddDepositAccount} entityOptions={entityOptions} bankOptions={bankOptions} ccyOptions={ccyOptions} entityLookup={entityLookup} />}
+      {showExternalModal && <AddExternalAccountModal onClose={() => setShowExternalModal(false)} onSubmit={handleAddExternalAccount} entityOptions={entityOptions} ccyOptions={ccyOptions} entityLookup={entityLookup} />}
+      {showDepositModal && <AddDepositAccountModal onClose={() => setShowDepositModal(false)} onSubmit={handleAddDepositAccount} entityOptions={entityOptions} ccyOptions={ccyOptions} entityLookup={entityLookup} />}
+      {showPartnerModal && <AddBankingPartnerModal onClose={() => setShowPartnerModal(false)} onSubmit={handleAddBankingPartner} />}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
         {kpis.map((kpi) => <KpiCard key={kpi.label} {...kpi} />)}
@@ -692,7 +809,16 @@ export function AccountsPanel() {
         </DataCard>
       </div>
 
-      <DataCard title="Bank Accounts" subtitle="Accounts from bank_account.json" style={{ marginBottom: 24 }}>
+      <DataCard
+        title="Bank Accounts"
+        subtitle="Source and user-created accounts"
+        headerRight={(
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button type="button" style={headerActionBtnStyle} onClick={() => setShowExternalModal(true)}>Add Account</button>
+          </div>
+        )}
+        style={{ marginBottom: 24 }}
+      >
         <div style={{ overflowX: 'auto', padding: '0 8px 8px 8px' }}>
           <table className="w-full border-collapse min-w-[950px]">
             <thead>
@@ -731,7 +857,16 @@ export function AccountsPanel() {
         )}
       </DataCard>
 
-      <DataCard title="Banking Partners" subtitle="Aggregated balance by banking relationship - EUR" style={{ marginBottom: 24 }}>
+      <DataCard
+        title="Banking Partners"
+        subtitle="Aggregated balance by banking relationship - EUR"
+        headerRight={(
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button type="button" style={headerActionBtnStyle} onClick={() => setShowPartnerModal(true)}>Add Partner</button>
+          </div>
+        )}
+        style={{ marginBottom: 24 }}
+      >
         <div style={{ overflowX: 'auto', padding: '0 8px 8px 8px' }}>
           <table className="w-full border-collapse min-w-[800px]">
             <thead>
@@ -744,9 +879,15 @@ export function AccountsPanel() {
                 <tr key={partner.bank} className={rowClassName}>
                   <td className={`${cellPadding} text-[12px] font-semibold text-white`}>{partner.bank}</td>
                   <td className={`${cellPadding} font-mono text-[12px] text-text-primary`}>{partner.accountCount}</td>
-                  <td className={`${cellPadding} text-right font-mono text-[12px] text-status-green`}>{formatEur(partner.totalBalanceEur)}</td>
-                  <td className={cellPadding}><div className="flex gap-1 flex-wrap">{partner.entities.map((entity) => <span key={entity} className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-surface-2 text-muted">{entity}</span>)}</div></td>
-                  <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{partner.currencies.join(', ')}</td>
+                  <td className={`${cellPadding} text-right font-mono text-[12px] ${partner.totalBalanceEur > 0 ? 'text-status-green' : 'text-muted'}`}>{formatEur(partner.totalBalanceEur)}</td>
+                  <td className={cellPadding}>
+                    {partner.entities.length > 0 ? (
+                      <div className="flex gap-1 flex-wrap">{partner.entities.map((entity) => <span key={entity} className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-surface-2 text-muted">{entity}</span>)}</div>
+                    ) : (
+                      <span className="font-mono text-[10px] text-muted">No linked accounts yet</span>
+                    )}
+                  </td>
+                  <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{partner.currencies.length > 0 ? partner.currencies.join(', ') : '\u2014'}</td>
                 </tr>
               )) : renderEmptyTableRow(5)}
             </tbody>

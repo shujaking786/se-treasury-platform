@@ -9,6 +9,7 @@ import { matchesAreCode } from '../../selectors/filtering';
 import { fetchAccountingFunding, type AccountingFunding } from '../../data/hr';
 import { legalEntities } from '../../data/legal';
 import { bankAccounts } from '../../data/accounts';
+import { getAllProjectCurrencyCodes } from '../../utils/projectCurrencies';
 
 const FUNDING_STORAGE_KEY = 'accounting_fundings_local';
 
@@ -42,6 +43,37 @@ function formatEur(value: number): string {
   }
 
   return `${sign}\u20AC${abs.toFixed(0)}`;
+}
+
+function formatDisplayDate(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return '\u2014';
+  }
+
+  const isoDateMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (isoDateMatch) {
+    const [, year, month, day] = isoDateMatch;
+    const utcDate = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+    return new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    }).format(utcDate);
+  }
+
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime())) {
+    return trimmed;
+  }
+
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(parsed);
 }
 
 function renderEmptyTableRow(colSpan: number) {
@@ -250,10 +282,9 @@ export function AccountingPanel() {
     setShowModal(false);
   }, []);
 
-  // Build filter-aware dropdown options
   const filteredLegalEntities = useMemo(
-    () => legalEntities.filter((e) => matchesAreCode(activeFilters, e.areCode)),
-    [activeFilters],
+    () => legalEntities.slice().sort((left, right) => left.areCode.localeCompare(right.areCode)),
+    [],
   );
 
   const filteredBankAccounts = useMemo(
@@ -274,9 +305,12 @@ export function AccountingPanel() {
   }, [dropdownSourceAccounts]);
 
   const ccyOptions = useMemo<DropdownOption[]>(() => {
-    const unique = [...new Set(dropdownSourceAccounts.map((a) => a.ccy))].sort();
+    const unique = getAllProjectCurrencyCodes([
+      ...dropdownSourceAccounts.map((account) => account.ccy),
+      ...allFundings.map((funding) => funding.CCY),
+    ]);
     return unique.map((c) => ({ value: c, label: c }));
-  }, [dropdownSourceAccounts]);
+  }, [dropdownSourceAccounts, allFundings]);
 
   const purposeOptions = useMemo<DropdownOption[]>(() => [
     { value: 'Payroll', label: 'Payroll' },
@@ -432,7 +466,7 @@ export function AccountingPanel() {
                     <td className={`${cellPadding} text-[11px] text-text-primary`}>{item.Purpose}</td>
                     <td className={`${cellPadding} text-[11px] text-text-primary`}>{item.Bank_Name}</td>
                     <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{item.IBAN}</td>
-                    <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{item.date}</td>
+                    <td className={`${cellPadding} font-mono text-[10px] text-muted`}>{formatDisplayDate(item.date)}</td>
                     <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, item.Amount > 0 ? 'text-status-green' : 'text-muted')}>
                       {formatEur(item.Amount)}
                     </td>

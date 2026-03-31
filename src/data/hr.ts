@@ -145,6 +145,30 @@ export async function fetchFsrLiquiditySummary(): Promise<FsrLiquiditySummary[]>
   return json?.data?.fsr_liquidity_summaries?.items ?? [];
 }
 
+export interface FinalSummaryItem {
+  ARE: string;
+  Entity_Name: string;
+  Country: string;
+  Region: string;
+  External_Liquidity: number;
+  Reserved_for_Payment: number | string;
+  Funds_in_transit: number | string;
+  Expected_External_Liquidity: number;
+  External_Debt: number;
+  Internal_Liquidity: number;
+  Internal_Debt: number;
+  Total_Liquidity: number;
+  Total_Debt: number;
+  NET_Liquidity_Position: number;
+}
+
+export async function fetchFinalSummary(): Promise<FinalSummaryItem[]> {
+  const response = await fetch('/data/final_summary.json');
+  if (!response.ok) return [];
+  const json = await response.json();
+  return json?.data?.final_summaries?.items ?? [];
+}
+
 export const countryPresence: CountryPresence[] = [
   { country: 'Qatar', countryCode: 'QA', region: 'ME', entityCount: 1, areCodes: ['519X'] },
   { country: 'Saudi Arabia', countryCode: 'SA', region: 'ME', entityCount: 3, areCodes: ['4659', '4PD7', '516S'] },
