@@ -12,9 +12,10 @@ export function DashboardLayout() {
   const { activeFilters, removeFilter, clearFilters } = useStore();
 
   return (
-    <div style={{ position: 'relative', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="dashboard-shell" style={{ position: 'relative', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Topbar />
       <div
+        className="dashboard-content-wrap"
         style={{
           display: 'flex',
           flex: 1,
@@ -24,6 +25,7 @@ export function DashboardLayout() {
       >
         <Sidebar />
         <main
+          className="main-scroll dashboard-main"
           style={{
             flex: 1,
             minHeight: 0,
@@ -31,10 +33,10 @@ export function DashboardLayout() {
             padding: `${CONTENT_PADDING}px`,
             paddingBottom: `${CONTENT_PADDING + STATUS_BAR_HEIGHT + CONTENT_BOTTOM_GAP}px`,
           }}
-          className="main-scroll"
         >
           {activeFilters.length > 0 && (
             <div
+              className="dashboard-filter-bar"
               style={{
                 marginBottom: 16,
                 padding: 14,

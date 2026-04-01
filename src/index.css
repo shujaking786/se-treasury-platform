@@ -115,8 +115,153 @@ body {
   display: none !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .mobile-nav-trigger {
     display: flex !important;
+  }
+
+  .app-sidebar {
+    display: none !important;
+  }
+
+  .app-sidebar.sidebar-open {
+    display: block !important;
+  }
+
+  .app-topbar {
+    height: auto !important;
+    flex-wrap: wrap;
+    align-items: center !important;
+    gap: 16px !important;
+    padding: 16px !important;
+  }
+
+  .app-topbar-brand {
+    flex: 1 1 280px;
+    justify-content: flex-start !important;
+  }
+
+  .app-topbar-nav {
+    order: 3;
+    width: 100%;
+    gap: 12px !important;
+    margin-left: 0 !important;
+    padding-bottom: 4px;
+  }
+
+  .app-topbar-nav a {
+    padding: 8px 14px !important;
+  }
+
+  .app-topbar-actions {
+    margin-left: 0 !important;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .dashboard-main {
+    padding: 16px !important;
+    padding-bottom: 56px !important;
+  }
+
+  .dashboard-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .dashboard-two-column-grid,
+  .dashboard-mini-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .data-card-header {
+    flex-wrap: wrap;
+  }
+
+  .app-status-bar {
+    height: auto !important;
+    padding: 8px 16px !important;
+    gap: 10px !important;
+    flex-wrap: wrap;
+  }
+
+  .app-status-brand {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+}
+
+@media (max-width: 980px) {
+  body {
+    overflow: auto;
+  }
+
+  .login-page {
+    grid-template-columns: 1fr !important;
+  }
+
+  .login-hero {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 36px 24px !important;
+  }
+
+  .login-metrics {
+    grid-template-columns: 1fr !important;
+  }
+
+  .login-panel-shell {
+    padding: 24px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-shell {
+    min-height: 100vh;
+    height: auto !important;
+  }
+
+  .dashboard-content-wrap {
+    padding-bottom: 0 !important;
+  }
+
+  .dashboard-main {
+    padding: 12px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .dashboard-kpi-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-topbar-brand {
+    flex-basis: 100%;
+  }
+
+  .app-topbar-brand-text span {
+    white-space: normal !important;
+  }
+
+  .app-topbar-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .app-topbar-date {
+    display: none;
+  }
+
+  .app-status-bar {
+    position: static !important;
+  }
+
+  .kpi-card {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .login-panel {
+    padding: 24px !important;
+    border-radius: 22px !important;
   }
 }

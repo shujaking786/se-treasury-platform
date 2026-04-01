@@ -82,10 +82,12 @@ const modalOverlayStyle: React.CSSProperties = {
   inset: 0,
   zIndex: 50,
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'center',
   background: 'rgba(0,0,0,0.6)',
   backdropFilter: 'blur(4px)',
+  overflowY: 'auto',
+  padding: '24px 16px',
 };
 
 const modalBoxStyle: React.CSSProperties = {
@@ -95,7 +97,8 @@ const modalBoxStyle: React.CSSProperties = {
   boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
   width: '100%',
   maxWidth: 620,
-  margin: '0 16px',
+  maxHeight: 'calc(100vh - 48px)',
+  overflowY: 'auto',
 };
 
 const modalHeaderStyle: React.CSSProperties = {
@@ -120,7 +123,7 @@ const modalFormStyle: React.CSSProperties = {
 
 const modalGridStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
   gap: 20,
 };
 
@@ -828,7 +831,7 @@ export function LegalPanel() {
         />
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
+      <div className="dashboard-kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
         {legal.kpis.map((kpi) => (
           <KpiCard key={kpi.label} {...kpi} />
         ))}

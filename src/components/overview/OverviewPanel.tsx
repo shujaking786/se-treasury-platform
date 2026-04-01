@@ -219,13 +219,13 @@ export function OverviewPanel() {
 
   return (
     <div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '14px', marginBottom: '24px', marginTop: '10px' }}>
+      <div className="dashboard-kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '14px', marginBottom: '24px', marginTop: '10px' }}>
         {overview.kpis.map((kpi) => (
           <KpiCard key={kpi.label} {...kpi} />
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+      <div className="dashboard-two-column-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
         <DataCard title="MEA Regional Breakdown" subtitle="Total Net Position by Region — EUR">
           <div style={{ padding: '16px' }}>
             <div style={{ marginBottom: '12px' }}>
@@ -266,7 +266,7 @@ export function OverviewPanel() {
               </div>
             </div>
 
-            <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+            <div className="dashboard-mini-grid" style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
               <div style={{ background: 'var(--color-surface-2)', borderRadius: '8px', padding: '12px' }}>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--color-muted)', marginBottom: '6px' }}>EXTERNAL LIQUIDITY</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: 'white', fontWeight: 'bold' }}>{formatBreakdownValue(overview.externalLiquidity)}</div>

@@ -4,16 +4,13 @@
     <meta charset="UTF-8" />
     <link id="app-favicon" rel="icon" type="image/svg+xml" href="/favicon-se.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SE Treasury Intelligence Platform - MEA</title>
+    <title>Siemens Energy Treasury Intelligence Platform - MEA and Africa</title>
     <script>
       try {
-        const persisted = JSON.parse(localStorage.getItem('se-treasury-platform-ui') || 'null');
-        const brandMode = persisted?.state?.brandMode || 'siemens-energy';
-
-        document.documentElement.dataset.brand = brandMode;
+        document.documentElement.dataset.brand = 'siemens-energy';
         const favicon = document.getElementById('app-favicon');
         if (favicon) {
-          favicon.setAttribute('href', brandMode === 'siemens-energy' ? '/favicon-se.svg' : '/favicon.svg');
+          favicon.setAttribute('href', '/favicon-se.svg');
         }
       } catch {
         document.documentElement.dataset.brand = 'siemens-energy';

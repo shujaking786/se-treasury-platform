@@ -1,6 +1,7 @@
 export function StatusBar() {
   return (
     <div
+      className="app-status-bar"
       style={{
         position: 'fixed',
         bottom: 0,
@@ -19,6 +20,7 @@ export function StatusBar() {
       }}
     >
       <div
+        className="app-status-brand"
         style={{
           display: 'flex',
           alignItems: 'center',

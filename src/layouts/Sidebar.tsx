@@ -293,7 +293,7 @@ export function Sidebar() {
     ? {
         position: 'fixed',
         display: 'block',
-        top: '52px',
+        top: 0,
         left: 0,
         bottom: 0,
         width: '240px',
@@ -326,7 +326,7 @@ export function Sidebar() {
         />
       )}
 
-      <div style={sidebarStyle} className="sidebar-scroll">
+      <div style={sidebarStyle} className={`sidebar-scroll app-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <div style={{ marginBottom: '16px' }}>
           <div style={sectionHeadingStyle}>View By</div>
           {viewModes.map((vm) => {

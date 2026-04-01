@@ -3,13 +3,12 @@ import { NAV_TABS } from '../constants';
 import { useStore } from '../store';
 
 export function Topbar() {
-  const { toggleSidebar, brandMode, toggleBrandMode } = useStore();
+  const { toggleSidebar, logout, userName } = useStore();
   const today = new Date().toISOString().split('T')[0];
-  const isSiemensBrand = brandMode === 'siemens-energy';
 
   return (
-    <div style={{
-      height: 80,
+    <div className="app-topbar" style={{
+      minHeight: 80,
       justifyContent: 'space-between',
       backgroundColor: 'var(--color-surface)',
       borderBottom: '1px solid var(--color-border-2)',
@@ -51,7 +50,7 @@ export function Topbar() {
       </button>
 
       {/* Logo */}
-      <div style={{
+      <div className="app-topbar-brand" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -65,32 +64,14 @@ export function Topbar() {
         minWidth: 0,
       }}>
         <div></div>
-        {isSiemensBrand ? (
-          <img
-            src="/se-logo-light.svg"
-            alt="Siemens Energy"
-            style={{ height: 24, width: 'auto', display: 'block', flexShrink: 0 }}
-          />
-        ) : (
-          <div style={{
-            width: 40,
-            height: 40,
-            backgroundImage: 'var(--gradient-brand-diagonal)',
-            borderRadius: 6,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 12,
-            fontWeight: 900,
-            color: '#ffffff',
-            flexShrink: 0,
-          }}>
-            SE
-          </div>
-        )}
+        <img
+          src="/se-logo-light.svg"
+          alt="Siemens Energy"
+          style={{ height: 24, width: 'auto', display: 'block', flexShrink: 0 }}
+        />
         {/* Responsive behavior removed (was hidden sm:block), showing by default */}
-        <div style={{ minWidth: 0 }}>
-          {isSiemensBrand ? 'Siemens Energy' : 'Treasury Intelligence'}<br />
+        <div className="app-topbar-brand-text" style={{ minWidth: 0 }}>
+          Siemens Energy<br />
           <span style={{
             fontFamily: 'var(--font-mono)',
             fontSize: 10,
@@ -98,13 +79,13 @@ export function Topbar() {
             color: 'var(--color-muted)',
             whiteSpace: 'nowrap',
           }}>
-            {isSiemensBrand ? 'MEA TREASURY INTELLIGENCE PLATFORM' : 'MEA REGIONAL PLATFORM / FINAVIGATE-LINKED'}
+            MEA AND AFRICA TREASURY INTELLIGENCE PLATFORM
           </span>
         </div>
       </div>
 
       {/* Navigation — responsive behavior removed (was hidden md:flex), showing by default */}
-      <nav style={{
+      <nav className="app-topbar-nav" style={{
         display: 'flex',
         gap: 40,
         overflowX: 'auto',
@@ -134,50 +115,54 @@ export function Topbar() {
       </nav>
 
       {/* Right section */}
-      <div style={{
+      <div className="app-topbar-actions" style={{
         marginLeft: 'auto',
         display: 'flex',
         alignItems: 'center',
         gap: 12,
       }}>
-        <button
-          type="button"
-          onClick={toggleBrandMode}
-          aria-pressed={isSiemensBrand}
-          aria-label={isSiemensBrand ? 'Switch to the original branding' : 'Switch to Siemens Energy branding'}
+        <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
+            paddingLeft: 12,
+            paddingRight: 12,
+            paddingTop: 6,
+            paddingBottom: 6,
             borderRadius: 9999,
-            border: '1px solid var(--color-accent-border)',
-            background: isSiemensBrand ? 'var(--color-accent-hover)' : 'var(--color-surface-2)',
+            border: '1px solid var(--color-border-2)',
+            background: 'var(--color-surface-2)',
             color: 'var(--color-text-primary)',
             fontFamily: 'var(--font-mono)',
             fontSize: 10,
-            fontWeight: 600,
-            paddingLeft: 10,
-            paddingRight: 12,
-            paddingTop: 5,
-            paddingBottom: 5,
-            cursor: 'pointer',
-            flexShrink: 0,
+            whiteSpace: 'nowrap',
           }}
         >
-          <span
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: 9999,
-              background: 'var(--gradient-brand-diagonal)',
-              display: 'inline-block',
-            }}
-          />
-          <span>Brand</span>
-          <span style={{ color: 'var(--color-accent)' }}>{isSiemensBrand ? 'Siemens Energy' : 'Original'}</span>
+          User <span style={{ color: 'var(--color-accent)' }}>{userName || 'Guest'}</span>
+        </div>
+        <button
+          type="button"
+          onClick={logout}
+          aria-label="Sign out"
+          style={{
+            borderRadius: 9999,
+            border: '1px solid var(--color-border-2)',
+            background: 'transparent',
+            color: 'var(--color-muted)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: 0.8,
+            textTransform: 'uppercase',
+            paddingLeft: 12,
+            paddingRight: 12,
+            paddingTop: 6,
+            paddingBottom: 6,
+            cursor: 'pointer',
+          }}
+        >
+          Sign Out
         </button>
         {/* Responsive behavior removed (was hidden lg:block), showing by default */}
-        <div style={{
+        <div className="app-topbar-date" style={{
           fontFamily: 'var(--font-mono)',
           fontSize: 10,
           color: 'var(--color-muted)',

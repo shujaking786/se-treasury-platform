@@ -14,7 +14,7 @@ interface DataCardProps {
 
 export function DataCard({ title, subtitle, headerRight, headerStyle, borderStyle, footer, children, style, bodyPadding = false }: DataCardProps) {
   return (
-    <div style={{
+    <div className="data-card" style={{
       backgroundColor: 'var(--color-surface)',
       border: '1px solid var(--color-border-custom)',
       borderRadius: 10,
@@ -24,7 +24,7 @@ export function DataCard({ title, subtitle, headerRight, headerStyle, borderStyl
       ...style,
     }}>
       {title && (
-        <div style={{
+        <div className="data-card-header" style={{
           paddingLeft: 18,
           paddingRight: 18,
           paddingTop: 14,

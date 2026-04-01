@@ -136,7 +136,7 @@ export function FinancialSummaryPanel() {
   return (
     <div>
       {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 24 }}>
+      <div className="dashboard-kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 24 }}>
         {fsrKpis.map((kpi) => (
           <KpiCard key={kpi.label} {...kpi} />
         ))}
@@ -179,11 +179,11 @@ export function FinancialSummaryPanel() {
           </table>
         </div>
         {extTotalPages > 1 && (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
             <span className="font-mono text-[10px] text-muted">
               Showing {(extPage - 1) * PAGE_SIZE + 1}{'\u2013'}{Math.min(extPage * PAGE_SIZE, externalAccounts.length)} of {externalAccounts.length}
             </span>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               <button type="button" style={extPage === 1 ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={extPage === 1} onClick={() => setExtPage((p) => p - 1)}>Previous</button>
               <span className="font-mono text-[10px] text-muted" style={{ alignSelf: 'center', minWidth: 44, textAlign: 'center' }}>
                 {extPage} / {extTotalPages}
@@ -231,11 +231,11 @@ export function FinancialSummaryPanel() {
           </table>
         </div>
         {intTotalPages > 1 && (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
             <span className="font-mono text-[10px] text-muted">
               Showing {(intPage - 1) * PAGE_SIZE + 1}{'\u2013'}{Math.min(intPage * PAGE_SIZE, internalAccounts.length)} of {internalAccounts.length}
             </span>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               <button type="button" style={intPage === 1 ? paginationBtnDisabledStyle : paginationBtnStyle} disabled={intPage === 1} onClick={() => setIntPage((p) => p - 1)}>Previous</button>
               <span className="font-mono text-[10px] text-muted" style={{ alignSelf: 'center', minWidth: 44, textAlign: 'center' }}>
                 {intPage} / {intTotalPages}

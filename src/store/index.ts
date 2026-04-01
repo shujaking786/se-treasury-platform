@@ -8,7 +8,14 @@ export type BrandMode = 'default' | 'siemens-energy';
 interface AppState {
   // Branding
   brandMode: BrandMode;
+  setBrandMode: (mode: BrandMode) => void;
   toggleBrandMode: () => void;
+
+  // Authentication
+  isAuthenticated: boolean;
+  userName: string;
+  login: (userName: string) => void;
+  logout: () => void;
 
   // Navigation
   sidebarViewMode: ViewMode;
@@ -48,10 +55,17 @@ export const useStore = create<AppState>()(
     (set) => ({
       // Branding
       brandMode: 'siemens-energy',
+      setBrandMode: (mode) => set({ brandMode: mode }),
       toggleBrandMode: () =>
         set((state) => ({
           brandMode: state.brandMode === 'default' ? 'siemens-energy' : 'default',
         })),
+
+      // Authentication
+      isAuthenticated: false,
+      userName: '',
+      login: (userName) => set({ isAuthenticated: true, userName }),
+      logout: () => set({ isAuthenticated: false, userName: '' }),
 
       // Navigation
       sidebarViewMode: 'region',
@@ -87,7 +101,11 @@ export const useStore = create<AppState>()(
     {
       name: 'se-treasury-platform-ui',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ brandMode: state.brandMode }),
+      partialize: (state) => ({
+        brandMode: state.brandMode,
+        isAuthenticated: state.isAuthenticated,
+        userName: state.userName,
+      }),
     },
   ),
 );

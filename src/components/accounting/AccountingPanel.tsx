@@ -97,13 +97,13 @@ const emptyForm: AccountingFunding = {
 };
 
 const modalOverlayStyle: React.CSSProperties = {
-  position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center',
-  justifyContent: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+  position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'flex-start',
+  justifyContent: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', overflowY: 'auto', padding: '24px 16px',
 };
 const modalBoxStyle: React.CSSProperties = {
   background: 'var(--color-surface)', border: '1px solid var(--color-border-2)',
   borderRadius: 12, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
-  width: '100%', maxWidth: 620, margin: '0 16px',
+  width: '100%', maxWidth: 620, maxHeight: 'calc(100vh - 48px)', overflowY: 'auto',
 };
 const modalHeaderStyle: React.CSSProperties = {
   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -113,7 +113,7 @@ const modalTitleStyle: React.CSSProperties = {
   fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 700, color: 'white', letterSpacing: 0.5,
 };
 const modalFormStyle: React.CSSProperties = { padding: '24px 28px' };
-const modalGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', columnGap: 20, rowGap: 18 };
+const modalGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', columnGap: 20, rowGap: 18 };
 const fieldWrapperStyle: React.CSSProperties = { minWidth: 0 };
 const inputStyle: React.CSSProperties = {
   width: '100%', background: 'var(--color-surface-2)', border: '1px solid var(--color-border-2)',
@@ -354,14 +354,14 @@ export function AccountingPanel() {
         />
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
+      <div className="dashboard-kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
         <KpiCard label="Total Transactions" value={String(totalFundings)} subtitle="Funding records" gradient="default" />
         <KpiCard label="Total Amount" value={formatEur(totalAmount)} subtitle="EUR equivalent" gradient="green" />
         <KpiCard label="Banks" value={String(uniqueBanks)} subtitle="Unique banking partners" gradient="default" />
         <KpiCard label="Currencies" value={String(uniqueCurrencies)} subtitle="Unique currencies" gradient="default" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
+      <div className="dashboard-two-column-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
         <DataCard title="Transactions by Purpose" subtitle="Total amount grouped by transaction purpose">
           <div style={{ width: '100%', height: 300, padding: '8px' }}>
             {purposeChartData.length > 0 ? (

@@ -94,10 +94,12 @@ const modalOverlayStyle: React.CSSProperties = {
   inset: 0,
   zIndex: 50,
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'center',
   background: 'rgba(0,0,0,0.6)',
   backdropFilter: 'blur(4px)',
+  overflowY: 'auto',
+  padding: '24px 16px',
 };
 
 const modalBoxStyle: React.CSSProperties = {
@@ -107,7 +109,8 @@ const modalBoxStyle: React.CSSProperties = {
   boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
   width: '100%',
   maxWidth: 620,
-  margin: '0 16px',
+  maxHeight: 'calc(100vh - 48px)',
+  overflowY: 'auto',
 };
 
 const modalHeaderStyle: React.CSSProperties = {
@@ -132,7 +135,7 @@ const modalFormStyle: React.CSSProperties = {
 
 const modalGridStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
   gap: 20,
 };
 
@@ -810,11 +813,11 @@ export function AccountsPanel() {
       {showDepositModal && <AddDepositAccountModal onClose={() => setShowDepositModal(false)} onSubmit={handleAddDepositAccount} entityOptions={entityOptions} ccyOptions={ccyOptions} entityLookup={entityLookup} />}
       {showPartnerModal && <AddBankingPartnerModal onClose={() => setShowPartnerModal(false)} onSubmit={handleAddBankingPartner} />}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
+      <div className="dashboard-kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
         {kpis.map((kpi) => <KpiCard key={kpi.label} {...kpi} />)}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
+      <div className="dashboard-two-column-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
         <DataCard title="Bank Accounts by ARE" subtitle="Number of bank accounts per ARE">
           <div style={{ width: '100%', height: 300, padding: '8px 8px 8px 0' }}>
             {accountCountByAreChartData.length > 0 ? (
@@ -915,11 +918,11 @@ export function AccountsPanel() {
           </table>
         </div>
         {bankTotalPages > 1 && (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
             <span className="font-mono text-[10px] text-muted">
               Showing {(bankPage - 1) * BANK_PAGE_SIZE + 1}{'\u2013'}{Math.min(bankPage * BANK_PAGE_SIZE, filteredBankAccounts.length)} of {filteredBankAccounts.length}
             </span>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               <button type="button" style={{ padding: '6px 12px', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.5, border: '1px solid var(--color-border-2)', borderRadius: 6, background: 'transparent', color: 'var(--color-muted)', cursor: 'pointer', ...(bankPage === 1 ? { opacity: 0.35, cursor: 'default' } : {}) }} disabled={bankPage === 1} onClick={() => setBankPage((p) => p - 1)}>&laquo; Prev</button>
               {Array.from({ length: bankTotalPages }, (_, i) => i + 1).map((p) => (
                 <button key={p} type="button" style={{ padding: '6px 12px', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.5, border: '1px solid var(--color-border-2)', borderRadius: 6, cursor: 'pointer', ...(p === bankPage ? { background: 'var(--color-accent)', borderColor: 'var(--color-accent)', color: 'white' } : { background: 'transparent', color: 'var(--color-muted)' }) }} onClick={() => setBankPage(p)}>{p}</button>
@@ -967,11 +970,11 @@ export function AccountsPanel() {
           </table>
         </div>
         {partnerTotalPages > 1 && (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, padding: '12px 16px', borderTop: '1px solid var(--color-border-2)' }}>
             <span className="font-mono text-[10px] text-muted">
               Showing {(partnerPage - 1) * PARTNER_PAGE_SIZE + 1}{'\u2013'}{Math.min(partnerPage * PARTNER_PAGE_SIZE, bankingPartners.length)} of {bankingPartners.length}
             </span>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               <button type="button" style={{ padding: '6px 12px', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.5, border: '1px solid var(--color-border-2)', borderRadius: 6, background: 'transparent', color: 'var(--color-muted)', cursor: 'pointer', ...(partnerPage === 1 ? { opacity: 0.35, cursor: 'default' } : {}) }} disabled={partnerPage === 1} onClick={() => setPartnerPage((p) => p - 1)}>&laquo; Prev</button>
               {Array.from({ length: partnerTotalPages }, (_, i) => i + 1).map((p) => (
                 <button key={p} type="button" style={{ padding: '6px 12px', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: 0.5, border: '1px solid var(--color-border-2)', borderRadius: 6, cursor: 'pointer', ...(p === partnerPage ? { background: 'var(--color-accent)', borderColor: 'var(--color-accent)', color: 'white' } : { background: 'transparent', color: 'var(--color-muted)' }) }} onClick={() => setPartnerPage(p)}>{p}</button>

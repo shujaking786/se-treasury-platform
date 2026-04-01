@@ -3,16 +3,17 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
 import { useStore } from './store';
 
-const faviconMap = {
-  default: '/favicon.svg',
-  'siemens-energy': '/favicon-se.svg',
-} as const;
-
 function App() {
   const brandMode = useStore((state) => state.brandMode);
+  const setBrandMode = useStore((state) => state.setBrandMode);
 
   useEffect(() => {
-    document.documentElement.dataset.brand = brandMode;
+    if (brandMode !== 'siemens-energy') {
+      setBrandMode('siemens-energy');
+      return;
+    }
+
+    document.documentElement.dataset.brand = 'siemens-energy';
 
     let favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
     if (!favicon) {
@@ -22,8 +23,8 @@ function App() {
       document.head.appendChild(favicon);
     }
 
-    favicon.href = faviconMap[brandMode];
-  }, [brandMode]);
+    favicon.href = '/favicon-se.svg';
+  }, [brandMode, setBrandMode]);
 
   return <RouterProvider router={router} />;
 }

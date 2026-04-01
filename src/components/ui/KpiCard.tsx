@@ -16,7 +16,7 @@ const valueColorMap: Record<string, string> = {
 
 export function KpiCard({ label, value, valueColor = 'white', subtitle, gradient }: KpiCardData) {
   return (
-    <div style={{
+    <div className="kpi-card" style={{
       backgroundColor: 'var(--color-surface)',
       border: '1px solid var(--color-border-2)',
       borderRadius: 10,
