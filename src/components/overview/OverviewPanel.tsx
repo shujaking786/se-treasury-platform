@@ -81,6 +81,7 @@ function RegionSummaryTable({
         sum.fundsInTransit + (row.fundsInTransit ?? 0) * (row.fundsInTransitDirection === 'out' ? -1 : 1),
       reserved: sum.reserved + (row.reserved ?? 0),
       expectedExtLiquidity: sum.expectedExtLiquidity + row.expectedExtLiquidity,
+      extDebt: sum.extDebt + (row.extDebt ?? 0),
       intLiquidity: sum.intLiquidity + (row.intLiquidity ?? 0),
       intDebt: sum.intDebt + row.intDebt,
       totalNetPosition: sum.totalNetPosition + row.totalNetPosition,
@@ -90,6 +91,7 @@ function RegionSummaryTable({
       fundsInTransit: 0,
       reserved: 0,
       expectedExtLiquidity: 0,
+      extDebt: 0,
       intLiquidity: 0,
       intDebt: 0,
       totalNetPosition: 0,
@@ -101,11 +103,11 @@ function RegionSummaryTable({
       <SectionHeader title={title} />
       <DataCard subtitle={subtitle} style={{ marginBottom: 24 }}>
         <div style={{ overflowX: 'auto', padding: '4px 8px 8px 8px' }}>
-          <table className="w-full border-collapse min-w-[1150px]">
+          <table className="w-full border-collapse min-w-[1260px]">
             <thead>
               <tr className="bg-surface-2 border-b-2 border-border-2">
-                {['ARE', 'Country', 'Ext. Liquidity', 'Funds in Transit', 'Reserved', 'Expected Ext. Liq.', 'Int. Liquidity', 'Int. Debt', 'Total Net Position', 'Status'].map((heading, index) => (
-                  <th key={heading} className={cn(headerClassName, index >= 2 && index <= 8 ? 'text-right' : 'text-left')}>
+                {['ARE', 'Country', 'Ext. Liquidity', 'Funds in Transit', 'Reserved', 'Expected Ext. Liq.', 'External Debt', 'Int. Liquidity', 'Int. Debt', 'Total Net Position', 'Status'].map((heading, index) => (
+                  <th key={heading} className={cn(headerClassName, index >= 2 && index <= 9 ? 'text-right' : 'text-left')}>
                     {heading}
                   </th>
                 ))}
@@ -139,6 +141,9 @@ function RegionSummaryTable({
                           {formatPositionMillions(row.reserved)}
                         </td>
                         <td className={`${cellPadding} text-right font-mono text-[12px] text-white`}>{formatPositionMillions(row.expectedExtLiquidity)}</td>
+                        <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, (row.extDebt ?? 0) > 0 ? 'text-status-red' : 'text-muted')}>
+                          {formatPositionMillions(row.extDebt ?? 0)}
+                        </td>
                         <td className={cn(`${cellPadding} text-right font-mono text-[12px]`, row.intLiquidity ? 'text-status-green' : 'text-muted')}>
                           {formatPositionMillions(row.intLiquidity)}
                         </td>
@@ -166,6 +171,9 @@ function RegionSummaryTable({
                       {totals.reserved === 0 ? '\u2014' : formatPositionMillions(totals.reserved)}
                     </td>
                     <td className={`${cellPadding} text-right font-mono text-[12px] font-bold text-white`}>{formatPositionMillions(totals.expectedExtLiquidity)}</td>
+                    <td className={`${cellPadding} text-right font-mono text-[12px] font-bold ${totals.extDebt > 0 ? 'text-status-red' : 'text-muted'}`}>
+                      {formatPositionMillions(totals.extDebt)}
+                    </td>
                     <td className={`${cellPadding} text-right font-mono text-[12px] font-bold ${totals.intLiquidity > 0 ? 'text-status-green' : 'text-muted'}`}>
                       {totals.intLiquidity === 0 ? '\u2014' : formatPositionMillions(totals.intLiquidity)}
                     </td>
@@ -180,7 +188,7 @@ function RegionSummaryTable({
                 </>
               ) : (
                 <tr>
-                  <td colSpan={10} className="px-5 py-8 text-center font-mono text-[11px] text-muted">
+                  <td colSpan={11} className="px-5 py-8 text-center font-mono text-[11px] text-muted">
                     No summary rows for the current filter.
                   </td>
                 </tr>

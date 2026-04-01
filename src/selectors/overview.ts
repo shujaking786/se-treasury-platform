@@ -110,6 +110,7 @@ export function mapFinalSummaryRows(items: FinalSummaryItem[]): { meRows: Positi
       fundsInTransitDirection: fundsInTransit === 0 ? null : 'out',
       reserved: reserved === 0 ? null : toMillions(reserved),
       expectedExtLiquidity: toMillions(item.Expected_External_Liquidity),
+      extDebt: toMillions(Math.abs(item.External_Debt)),
       intLiquidity: internalLiquidity === 0 ? null : internalLiquidity,
       intDebt: internalDebt,
       totalNetPosition,

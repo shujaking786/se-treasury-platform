@@ -15,6 +15,7 @@ export interface PositionRow {
   fundsInTransitDirection: 'in' | 'out' | null;
   reserved: number | null;
   expectedExtLiquidity: number;
+  extDebt?: number | null;
   intLiquidity: number | null;
   intDebt: number;
   totalNetPosition: number;
@@ -29,6 +30,7 @@ export interface PositionSummary {
   fundsInTransit: number | null;
   reserved: number | null;
   expectedExtLiquidity: number;
+  extDebt?: number | null;
   intLiquidity: number | null;
   intDebt: number;
   totalNetPosition: number;
