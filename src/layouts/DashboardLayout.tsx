@@ -3,13 +3,14 @@ import { Topbar } from './Topbar';
 import { Sidebar } from './Sidebar';
 import { StatusBar } from './StatusBar';
 import { useStore } from '../store';
+import { ChatWidget } from '../components/chat/ChatWidget';
 
 const STATUS_BAR_HEIGHT = 24;
 const CONTENT_PADDING = 20;
 const CONTENT_BOTTOM_GAP = 24;
 
 export function DashboardLayout() {
-  const { activeFilters, removeFilter, clearFilters } = useStore();
+  const { activeFilters, removeFilter, clearFilters, userName } = useStore();
 
   return (
     <div className="dashboard-shell" style={{ position: 'relative', height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -120,6 +121,7 @@ export function DashboardLayout() {
         </main>
       </div>
       <StatusBar />
+      <ChatWidget userName={userName} />
     </div>
   );
 }

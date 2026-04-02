@@ -115,6 +115,24 @@ body {
   display: none !important;
 }
 
+.chat-widget-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-widget-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-widget-messages::-webkit-scrollbar-thumb {
+  background: rgba(180, 175, 207, 0.26);
+  border-radius: 9999px;
+}
+
+.chat-widget-backdrop {
+  opacity: 1;
+  transition: opacity 180ms ease;
+}
+
 @media (max-width: 1024px) {
   .mobile-nav-trigger {
     display: flex !important;
@@ -189,6 +207,25 @@ body {
     margin-left: 0 !important;
     width: 100%;
   }
+
+  .chat-widget-shell {
+    right: 16px !important;
+    bottom: 20px !important;
+  }
+
+  .chat-widget-panel {
+    width: min(calc(100vw - 32px), 420px) !important;
+    height: min(72vh, 620px) !important;
+  }
+
+  .chat-widget-composer-actions {
+    flex-wrap: wrap;
+    align-items: stretch !important;
+  }
+
+  .chat-widget-composer-hint {
+    flex: 1 1 220px;
+  }
 }
 
 @media (max-width: 980px) {
@@ -212,6 +249,48 @@ body {
 
   .login-panel-shell {
     padding: 24px !important;
+  }
+
+  .chat-widget-root.chat-widget-open {
+    pointer-events: auto !important;
+  }
+
+  .chat-widget-shell {
+    right: 16px !important;
+    bottom: 16px !important;
+  }
+
+  .chat-widget-root.chat-widget-open .chat-widget-shell {
+    inset: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    left: 12px !important;
+    top: 12px !important;
+    align-items: stretch !important;
+  }
+
+  .chat-widget-root.chat-widget-open .chat-widget-panel {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    border-radius: 24px !important;
+  }
+
+  .chat-widget-title {
+    font-size: 17px !important;
+  }
+
+  .chat-widget-subtitle {
+    font-size: 11px !important;
+  }
+
+  .chat-widget-messages,
+  .chat-widget-composer {
+    padding: 16px !important;
+  }
+
+  .chat-widget-message {
+    max-width: 92% !important;
   }
 }
 
@@ -263,5 +342,149 @@ body {
   .login-panel {
     padding: 24px !important;
     border-radius: 22px !important;
+  }
+
+  .chat-widget-root {
+    pointer-events: none;
+  }
+
+  .chat-widget-shell {
+    right: 12px !important;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .chat-widget-root.chat-widget-open .chat-widget-shell {
+    inset: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+  }
+
+  .chat-widget-root.chat-widget-open .chat-widget-backdrop {
+    background: rgba(10, 10, 18, 0.7) !important;
+    backdrop-filter: blur(8px) !important;
+  }
+
+  .chat-widget-root.chat-widget-open .chat-widget-panel {
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+  }
+
+  .chat-widget-launcher {
+    width: 56px !important;
+    height: 56px !important;
+    margin-right: 0 !important;
+  }
+
+  .chat-widget-header {
+    padding-top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+    gap: 10px !important;
+  }
+
+  .chat-widget-header-copy {
+    min-width: 0;
+  }
+
+  .chat-widget-kicker {
+    letter-spacing: 1px !important;
+  }
+
+  .chat-widget-title {
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+  }
+
+  .chat-widget-subtitle {
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+  }
+
+  .chat-widget-close {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .chat-widget-messages,
+  .chat-widget-composer {
+    padding: 14px !important;
+  }
+
+  .chat-widget-composer {
+    padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .chat-widget-empty {
+    padding: 16px !important;
+    font-size: 12px !important;
+  }
+
+  .chat-widget-message {
+    max-width: 100% !important;
+    padding: 11px 12px !important;
+  }
+
+  .chat-widget-message div:last-child {
+    font-size: 12px !important;
+    line-height: 1.6 !important;
+  }
+
+  .chat-widget-composer-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .chat-widget-composer-hint {
+    width: 100%;
+    order: 2;
+    text-align: left;
+  }
+
+  .chat-widget-send {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .chat-widget-textarea {
+    min-height: 84px !important;
+    padding: 12px 14px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .chat-widget-shell {
+    right: 8px !important;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .chat-widget-launcher {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .chat-widget-header,
+  .chat-widget-messages,
+  .chat-widget-composer {
+    padding: 12px !important;
+  }
+
+  .chat-widget-title {
+    font-size: 15px !important;
+  }
+
+  .chat-widget-close {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .chat-widget-subtitle,
+  .chat-widget-error {
+    font-size: 11px !important;
   }
 }
