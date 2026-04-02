@@ -214,8 +214,8 @@ body {
   }
 
   .chat-widget-panel {
-    width: min(calc(100vw - 32px), 420px) !important;
-    height: min(72vh, 620px) !important;
+    width: min(calc(100vw - 32px), 460px) !important;
+    height: min(76vh, 680px) !important;
   }
 
   .chat-widget-composer-actions {

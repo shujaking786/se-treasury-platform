@@ -333,8 +333,8 @@ export function ChatWidget({ userName }: ChatWidgetProps) {
         <div
           className="chat-widget-panel"
           style={{
-            width: 'min(390px, calc(100vw - 24px))',
-            height: 'min(560px, calc(100vh - 120px))',
+            width: 'min(440px, calc(100vw - 24px))',
+            height: 'min(620px, calc(100vh - 96px))',
             minWidth: 0,
             minHeight: 0,
             borderRadius: 28,
